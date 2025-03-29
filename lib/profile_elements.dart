@@ -8,6 +8,8 @@ class ProfileElementsPage extends StatefulWidget {
 }
 
 class _ProfileElementsPageState extends State<ProfileElementsPage> {
+  bool _isHovered = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,10 +38,7 @@ class _ProfileElementsPageState extends State<ProfileElementsPage> {
                 children: [
                   // Logo section
                   Padding(
-                    padding: EdgeInsets.only(
-                      top: constraints.maxHeight * 0.05,
-                      bottom: constraints.maxHeight * 0.03,
-                    ),
+                    padding: EdgeInsets.only(top: 140),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -79,7 +78,7 @@ class _ProfileElementsPageState extends State<ProfileElementsPage> {
                   ),
                   // Profile form container
                   Container(
-                    width: constraints.maxWidth * 0.9,
+                    width: constraints.maxWidth * 0.7,
                     margin: EdgeInsets.symmetric(vertical: 20),
                     padding: EdgeInsets.symmetric(
                       vertical: constraints.maxHeight * 0.03,
@@ -96,7 +95,7 @@ class _ProfileElementsPageState extends State<ProfileElementsPage> {
                           'Profile',
                           style: TextStyle(
                             color: Color(0xFF071D99),
-                            fontSize: constraints.maxWidth * 0.07,
+                            fontSize: constraints.maxWidth * 0.05,
                             fontWeight: FontWeight.w900,
                           ),
                         ),
@@ -127,11 +126,11 @@ class _ProfileElementsPageState extends State<ProfileElementsPage> {
                           cursor: SystemMouseCursors.click,
                           child: GestureDetector(
                             onTap: () {
-                              // Add navigation to next page here
+                              //Add navigation to next page here when combined already, welcome page or dashboard
                             },
                             child: Container(
                               width: double.infinity,
-                              height: constraints.maxHeight * 0.06,
+                              height: constraints.maxHeight * 0.05,
                               decoration: BoxDecoration(
                                 gradient: LinearGradient(
                                   colors: [Color(0xFF071D99), Color(0xFF071D99)],
@@ -143,7 +142,7 @@ class _ProfileElementsPageState extends State<ProfileElementsPage> {
                                   'Next',
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: constraints.maxWidth * 0.04,
+                                    fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -155,6 +154,8 @@ class _ProfileElementsPageState extends State<ProfileElementsPage> {
                         // Change Account link
                         MouseRegion(
                           cursor: SystemMouseCursors.click,
+                          onEnter: (_) => setState(() => _isHovered = true),
+                          onExit: (_) => setState(() => _isHovered = false),
                           child: GestureDetector(
                             onTap: () {
                               showDialog(
@@ -181,8 +182,8 @@ class _ProfileElementsPageState extends State<ProfileElementsPage> {
                             child: Text(
                               'Change Account',
                               style: TextStyle(
-                                color: Color(0xFF071D99),
-                                fontSize: constraints.maxWidth * 0.04,
+                                color: _isHovered ? Color(0xFFD7A61F) : Color(0xFF071D99),
+                                fontSize: 15,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
