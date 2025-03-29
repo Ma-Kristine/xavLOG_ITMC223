@@ -62,7 +62,7 @@ class _SigninPageState extends State<SigninPage> {
                           ),
                         ),
                         Text(
-                          'Your Campus Tether',  // Add your desired phrase here
+                          'Your Campus Tether',  // Add your desired phrase here, if we are still going to change it or what
                           style: TextStyle(
                             color: Color(0xFFD7A61F),
                             fontFamily: 'Jost',
