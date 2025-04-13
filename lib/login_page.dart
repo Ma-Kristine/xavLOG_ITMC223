@@ -31,8 +31,8 @@ class _LoginPageState extends State<LoginPage> {
                 colors: [
                   Color(0xFF132BB2),
                   Color(0xFF132BB2),
-                  Color(0xFFFFFFFF),
-                  Color(0xFFFFFFFF),
+                  Color(0xFFD7A61F),
+                  Color(0xFFD7A61F),
                 ],
               ),
             ),

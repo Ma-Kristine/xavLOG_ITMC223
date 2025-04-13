@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:xavlogsigninpage/home_page_dashboard.dart';
 import 'package:xavlogsigninpage/login_page.dart';
 
 class ProfileElementsPage extends StatefulWidget {
@@ -36,29 +37,51 @@ class _ProfileElementsPageState extends State<ProfileElementsPage> {
               ),
               child: Column(
                 children: [
-                  // Logo section
+                  // Add back button at the top
                   Padding(
-                    padding: EdgeInsets.only(top: 140),
+                    padding: EdgeInsets.only(
+                      top: MediaQuery.of(context).padding.top + 20,
+                      left: 20,
+                    ),
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: IconButton(
+                        icon: const Icon(
+                          Icons.arrow_back,
+                          color: Color(0xFFD7A61F),
+                          size: 24,
+                        ),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                    ),
+                  ),
+                  // Logo section
+                  Container(
+                    width: 360, // Fixed container width
+                    padding: const EdgeInsets.only(top: 10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         SizedBox(
-                          height: constraints.maxWidth * 0.12,
-                          width: constraints.maxWidth * 0.12,
-                          child: Image.asset('images/xavloglogo.png', fit: BoxFit.contain),
+                          height: 45,
+                          width: 45,
+                          child: Image.asset(
+                            'images/xavloglogo.png',
+                            fit: BoxFit.contain,
+                          ),
                         ),
-                        SizedBox(width: constraints.maxWidth * 0.02),
+                        const SizedBox(width: 8),
                         Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
+                          children: const [
                             Text(
                               'xavLog',
                               style: TextStyle(
                                 color: Color(0xFFD7A61F),
                                 fontStyle: FontStyle.italic,
                                 fontFamily: 'Jost',
-                                fontSize: constraints.maxWidth * 0.06,
+                                fontSize: 24,
                                 fontWeight: FontWeight.w800,
                               ),
                             ),
@@ -67,7 +90,7 @@ class _ProfileElementsPageState extends State<ProfileElementsPage> {
                               style: TextStyle(
                                 color: Color(0xFFD7A61F),
                                 fontFamily: 'Jost',
-                                fontSize: constraints.maxWidth * 0.03,
+                                fontSize: 12,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -77,13 +100,11 @@ class _ProfileElementsPageState extends State<ProfileElementsPage> {
                     ),
                   ),
                   // Profile form container
+                  SizedBox(height: 20),
                   Container(
-                    width: constraints.maxWidth * 0.7,
-                    margin: EdgeInsets.symmetric(vertical: 20),
-                    padding: EdgeInsets.symmetric(
-                      vertical: constraints.maxHeight * 0.03,
-                      horizontal: constraints.maxWidth * 0.05,
-                    ),
+                    width: 320, // Fixed width
+                    margin: const EdgeInsets.symmetric(vertical: 20),
+                    padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
                       color: Color(0xFFFFFFFF),
                       borderRadius: BorderRadius.circular(10),
@@ -91,15 +112,15 @@ class _ProfileElementsPageState extends State<ProfileElementsPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(
-                          'Profile',
+                        const Text(
+                          'Student\'s Profile',
                           style: TextStyle(
                             color: Color(0xFF071D99),
-                            fontSize: constraints.maxWidth * 0.05,
+                            fontSize: 20, // Fixed font size
                             fontWeight: FontWeight.w900,
                           ),
                         ),
-                        SizedBox(height: constraints.maxHeight * 0.03),
+                        SizedBox(height: constraints.maxHeight * 0.05),
                         // Form fields
                         ...[
                           'First Name',
@@ -120,13 +141,18 @@ class _ProfileElementsPageState extends State<ProfileElementsPage> {
                             ),
                           ),
                         )),
-                        SizedBox(height: constraints.maxHeight * 0.02),
+                        SizedBox(height: 40),
                         // Next button
                         MouseRegion(
                           cursor: SystemMouseCursors.click,
                           child: GestureDetector(
                             onTap: () {
-                              //Add navigation to next page here when combined already, welcome page or dashboard
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Homepage(),
+                                ),
+                              );
                             },
                             child: Container(
                               width: double.infinity,
