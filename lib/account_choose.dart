@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:xavlogsigninpage/profile_organization.dart';
 import 'package:xavlogsigninpage/signin_page.dart';
 import 'profile_elements.dart';
 
@@ -80,7 +81,7 @@ class _AccountChoosePageState extends State<AccountChoosePage> {
                       ],
                     ),
                   ),
-                  SizedBox(height: constraints.maxHeight * 0.07),
+                  SizedBox(height: constraints.maxHeight * 0.05),
                   Container(
                     width: constraints.maxWidth * 0.9,
                     constraints: BoxConstraints(
@@ -107,7 +108,7 @@ class _AccountChoosePageState extends State<AccountChoosePage> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 80),
+                        SizedBox(height: 60),
                         _buildAccountButton(
                           'Student Account',
                           () {
@@ -123,7 +124,12 @@ class _AccountChoosePageState extends State<AccountChoosePage> {
                         _buildAccountButton(
                           'Organization Account',
                           () {
-                            Text('Organization Account');
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ProfileOrganization(),
+                              ),
+                            );
                           },
                         ),
                       ],

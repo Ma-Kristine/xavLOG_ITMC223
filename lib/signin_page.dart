@@ -33,8 +33,8 @@ class _SigninPageState extends State<SigninPage> {
                 colors: [
                   Color(0xFF132BB2),
                   Color(0xFF132BB2),
-                  Color(0xFFFFFFFF),
-                  Color(0xFFFFFFFF),
+                  Color(0xFFD7A61F),
+                  Color(0xFFD7A61F),
                 ],
               )
             ),
@@ -159,8 +159,8 @@ class _SigninPageState extends State<SigninPage> {
                                   borderRadius: BorderRadius.circular(10),
                                   gradient: LinearGradient(
                                     colors: [
-                                      isSignInHovered ? Color(0xFF0529CC) : Color(0xFF071D99),//if-else statement
-                                      isSignInHovered ? Color(0xFF0529CC) : Color(0xFF071D99),
+                                      isSignInHovered ? Color(0xFF3352DF) : Color(0xFF071D99),//if-else statement
+                                      isSignInHovered ? Color(0xFF3352DF) : Color(0xFF071D99),
                                     ]
                                     )
                                 ),
