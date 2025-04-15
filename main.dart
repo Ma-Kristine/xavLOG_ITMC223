@@ -8,8 +8,8 @@
     The system calculates the Cumulative Final Rating Score (CFRS), letter grade, numerical grade, and overall QPI based on the data. 
     Users can add, edit, or delete partitions anytime.
    */
-
-import 'package:flutter/material.dart';
+  
+  import 'package:flutter/material.dart';
 
 void main() {
   runApp(MyApp());
@@ -37,89 +37,162 @@ class _AddSubjectScreenState extends State<AddSubjectScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          Scaffold(
-            appBar: AppBar(
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10.0),
-                    child: Icon(Icons.menu),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10.0),
-                    child: Text(
-                      'xavLOG',
-                      style: TextStyle(
-                        fontFamily: 'Rubik',
-                        fontStyle: FontStyle.italic,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 13.0,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              toolbarHeight: 60.0,
-            ),
-            body: Column(
+    return Stack(
+      children: [
+        Scaffold(
+          appBar: AppBar(
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Container(
-                    width: 380,
-                    height: 81,
-                    color: Color(0xFF283AA3),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 24.0),
-                          child: Text(
-                            'QPI',
-                            style: TextStyle(
-                              fontFamily: 'Jost',
-                              fontWeight: FontWeight.w600,
-                              fontSize: 35.0,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 24.0),
-                          child: Text(
-                            '0.00',
-                            style: TextStyle(
-                              fontFamily: 'Jost',
-                              fontWeight: FontWeight.w600,
-                              fontSize: 35.0,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 10.0),
+                  child: Icon(Icons.menu),
                 ),
-                Expanded(
-                  child: Center(
-                    child: Text(
-                      'No Subjects',
-                      style: TextStyle(
-                        fontFamily: 'Jost',
-                        fontSize: 16.0,
-                      ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 10.0),
+                  child: Text(
+                    'xavLOG',
+                    style: TextStyle(
+                      fontFamily: 'Rubik',
+                      fontStyle: FontStyle.italic,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 13.0,
                     ),
                   ),
                 ),
               ],
             ),
+            toolbarHeight: 60.0,
           ),
-          if (showOverlay)
-            GestureDetector(
+          body: Stack(
+            children: [
+              // Decorative Ellipses
+              Positioned(
+                top: MediaQuery.of(context).size.height * 0.33,
+                left: MediaQuery.of(context).size.width * 0.30,
+                child: Container(
+                  width: 34,
+                  height: 34,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Color(0xFF2CB4EC),
+                  ),
+                ),
+              ),
+              Positioned(
+                bottom: MediaQuery.of(context).size.height * 0.14,
+                left: -MediaQuery.of(context).size.width * 0.05,
+                child: Container(
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Color(0xFFE14B5A),
+                  ),
+                ),
+              ),
+              Positioned(
+                bottom: MediaQuery.of(context).size.height * 0.09,
+                left: MediaQuery.of(context).size.width * 0.53,
+                child: Container(
+                  width: 25,
+                  height: 25,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Color(0xFFEFB924),
+                  ),
+                ),
+              ),
+              Column(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Container(
+                      width: 380,
+                      height: 81,
+                      color: Color(0xFF283AA3),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 24.0),
+                            child: Text(
+                              'QPI',
+                              style: TextStyle(
+                                fontFamily: 'Jost',
+                                fontWeight: FontWeight.w600,
+                                fontSize: 35.0,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 24.0),
+                            child: Text(
+                              '0.00',
+                              style: TextStyle(
+                                fontFamily: 'Jost',
+                                fontWeight: FontWeight.w600,
+                                fontSize: 35.0,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Center(
+                      child: Text(
+                        'No Subjects',
+                        style: TextStyle(
+                          fontFamily: 'Jost',
+                          fontSize: 16.0,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Positioned(
+                bottom: 40.0,
+                right: 20.0,
+                child: Material(
+                  elevation: 6.0,
+                  shape: CircleBorder(),
+                  color: Color(0xFF283AA3),
+                  child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        showOverlay = true;
+                      });
+                    },
+                    child: Container(
+                      width: 68.0,
+                      height: 68.0,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                      ),
+                      child: Center(
+                        child: Icon(
+                          Icons.add,
+                          color: Colors.white,
+                          size: 34.0,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+
+        // Overlay covering appBar and body
+        if (showOverlay)
+          Positioned.fill(
+            child: GestureDetector(
               onTap: () {
                 setState(() {
                   showOverlay = false;
@@ -153,7 +226,6 @@ class _AddSubjectScreenState extends State<AddSubjectScreen> {
                           ),
                         ),
                       ),
-                      // Arrow positioned at the bottom right
                       Positioned(
                         bottom: 20.0,
                         right: 17.0,
@@ -168,38 +240,8 @@ class _AddSubjectScreenState extends State<AddSubjectScreen> {
                 ),
               ),
             ),
-          Positioned(
-            bottom: 40.0,
-            right: 20.0,
-            child: Material(
-              elevation: 6.0,
-              shape: CircleBorder(),
-              color: Color(0xFF283AA3),
-              child: InkWell(
-                onTap: () {
-                  setState(() {
-                    showOverlay = true;
-                  });
-                },
-                child: Container(
-                  width: 68.0,
-                  height: 68.0,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                  ),
-                  child: Center(
-                    child: Icon(
-                      Icons.add,
-                      color: Colors.white,
-                      size: 34.0,
-                    ),
-                  ),
-                ),
-              ),
-            ),
           ),
-        ],
-      ),
+      ],
     );
   }
 }
@@ -218,8 +260,10 @@ Widget buildInputField(String hintText, {bool isLarge = false}) {
         alignment: Alignment.centerLeft,
         child: Text(
           hintText,
-          style: TextStyle(
+          style: const TextStyle(
             fontFamily: 'Jost',
+            fontSize: 14.0,
+            fontWeight: FontWeight.w400,
             color: Color(0xFF475569),
           ),
         ),
@@ -227,6 +271,3 @@ Widget buildInputField(String hintText, {bool isLarge = false}) {
     ),
   );
 }
-
-// add design
-// make input pads functional
