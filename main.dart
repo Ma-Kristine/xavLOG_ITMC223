@@ -35,6 +35,14 @@ class AddSubjectScreen extends StatefulWidget {
 class _AddSubjectScreenState extends State<AddSubjectScreen> {
   bool showOverlay = false;
 
+  // Controllers for text input
+  final subjectCodeController = TextEditingController();
+  final subjectTitleController = TextEditingController();
+  final unitsController = TextEditingController();
+  final descriptionController = TextEditingController();
+
+  List<String> addedSubjects = [];
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -142,17 +150,47 @@ class _AddSubjectScreenState extends State<AddSubjectScreen> {
                       ),
                     ),
                   ),
+                  
                   Expanded(
-                    child: Center(
-                      child: Text(
-                        'No Subjects',
-                        style: TextStyle(
-                          fontFamily: 'Jost',
-                          fontSize: 16.0,
-                        ),
-                      ),
-                    ),
+                    child: addedSubjects.isEmpty
+                        ? Center(
+                            child: Text(
+                              'No Subjects',
+                              style: TextStyle(
+                                fontFamily: 'Jost',
+                                fontSize: 16.0,
+                              ),
+                            ),
+                          )
+                        : Padding(
+                            padding: EdgeInsets.only(top: 70.0), // Adds space between QPI and subjects
+                            child: ListView(
+                              children: addedSubjects.map((subject) {
+                                  return Column (
+                                    children: [ Container(
+                                      width: 380, // Matches QPI padding width
+                                      height: 45,
+                                      margin: EdgeInsets.symmetric(horizontal: 16.0),
+                                      decoration: BoxDecoration(
+                                        color: Color(0xFFE8E8EB),
+                                        borderRadius: BorderRadius.circular(9), // Sets corner radius
+                                      ),
+                                      padding: EdgeInsets.symmetric(horizontal: 20.0),
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        subject,
+                                        style: TextStyle(fontFamily: 'Jost', fontSize: 14.0),
+                                      ),
+                                    ),
+                                    SizedBox(height: 12.0),
+                                  ],
+                                );
+                              }).toList(),
+                            ),
+                          ),
                   ),
+
+
                 ],
               ),
               Positioned(
@@ -215,13 +253,13 @@ class _AddSubjectScreenState extends State<AddSubjectScreen> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              buildInputField("Subject Code*"),
+                              buildInputField("Subject Code*", controller: subjectCodeController),
                               SizedBox(height: 18),
-                              buildInputField("Subject Title"),
+                              buildInputField("Subject Title", controller: subjectTitleController),
                               SizedBox(height: 18),
-                              buildInputField("Units*"),
+                              buildInputField("Units*", controller: unitsController),
                               SizedBox(height: 18),
-                              buildInputField("Description", isLarge: true),
+                              buildInputField("Description", isLarge: true, controller: descriptionController),
                             ],
                           ),
                         ),
@@ -229,10 +267,28 @@ class _AddSubjectScreenState extends State<AddSubjectScreen> {
                       Positioned(
                         bottom: 20.0,
                         right: 17.0,
-                        child: Icon(
-                          Icons.arrow_forward_ios,
-                          size: 21.0,
-                          color: Colors.black,
+                        child: GestureDetector(
+                          onTap: () {
+                            if (subjectCodeController.text.isNotEmpty && unitsController.text.isNotEmpty) {
+                              setState(() {
+                                addedSubjects.add(subjectCodeController.text);
+                                showOverlay = false;
+
+                                // Clear text fields after saving
+                                subjectCodeController.clear();
+                                subjectTitleController.clear();
+                                unitsController.clear();
+                                descriptionController.clear();
+                                
+                              });
+                            }
+                          },
+                          child: 
+                            Icon(
+                            Icons.arrow_forward_ios,
+                            size: 21.0,
+                            color: Colors.black,
+                          ), 
                         ),
                       ),
                     ],
@@ -246,20 +302,23 @@ class _AddSubjectScreenState extends State<AddSubjectScreen> {
   }
 }
 
-Widget buildInputField(String hintText, {bool isLarge = false}) {
-  return Container(
-    width: 323,
-    height: isLarge ? 90.9 : 48.8,
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(10),
-      color: Color.fromARGB(255, 217, 217, 219),
-    ),
-    child: Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-      child: Align(
-        alignment: Alignment.centerLeft,
-        child: Text(
-          hintText,
+Widget buildInputField(String hintText, {bool isLarge = false, required TextEditingController controller}) {
+  return Material(
+    child: Container(
+      width: 323,
+      height: isLarge ? 90.9 : 48.8,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: Color.fromARGB(255, 217, 217, 219),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+        child: TextField(
+          controller: controller,
+          decoration: InputDecoration(
+            hintText: hintText,
+            border: InputBorder.none,
+          ),
           style: const TextStyle(
             fontFamily: 'Jost',
             fontSize: 14.0,
