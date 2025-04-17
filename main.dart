@@ -72,7 +72,9 @@ class _AddSubjectScreenState extends State<AddSubjectScreen> {
             ),
             toolbarHeight: 60.0,
           ),
-          body: Stack(
+          
+          body:
+          Stack(
             children: [
               // Decorative Ellipses
               Positioned(
@@ -111,6 +113,7 @@ class _AddSubjectScreenState extends State<AddSubjectScreen> {
                   ),
                 ),
               ),
+              
               Column(
                 children: [
                   ClipRRect(
@@ -151,6 +154,35 @@ class _AddSubjectScreenState extends State<AddSubjectScreen> {
                     ),
                   ),
                   
+                  SizedBox(height: 35.0),
+
+                  if (addedSubjects.isNotEmpty)
+                    Row(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(left: 24.0), // Aligns text with QPI padding
+                          child: Text(
+                            'My Subjects  ',
+                            style: TextStyle(
+                              fontFamily: 'Jost',
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Container(
+                            margin: EdgeInsets.only(right: 24.0), // Ensures line ends at QPI padding
+                            child: Divider(
+                              color: Color(0xFF071D99), // Line color
+                              thickness: 1.5, // Line thickness
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+
                   Expanded(
                     child: addedSubjects.isEmpty
                         ? Center(
@@ -163,26 +195,36 @@ class _AddSubjectScreenState extends State<AddSubjectScreen> {
                             ),
                           )
                         : Padding(
-                            padding: EdgeInsets.only(top: 70.0), // Adds space between QPI and subjects
+                            padding: EdgeInsets.only(top: 25.0), // Adds space between QPI and subjects
                             child: ListView(
                               children: addedSubjects.map((subject) {
                                   return Column (
-                                    children: [ Container(
-                                      width: 380, // Matches QPI padding width
-                                      height: 45,
-                                      margin: EdgeInsets.symmetric(horizontal: 16.0),
-                                      decoration: BoxDecoration(
-                                        color: Color(0xFFE8E8EB),
-                                        borderRadius: BorderRadius.circular(9), // Sets corner radius
-                                      ),
-                                      padding: EdgeInsets.symmetric(horizontal: 20.0),
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        subject,
-                                        style: TextStyle(fontFamily: 'Jost', fontSize: 14.0),
-                                      ),
-                                    ),
-                                    SizedBox(height: 12.0),
+                                    children: [ 
+                                      Container(
+                                        width: 380, // Matches QPI padding width
+                                        height: 45,
+                                        margin: EdgeInsets.symmetric(horizontal: 16.0),
+                                        decoration: BoxDecoration(
+                                          color: Color(0xFFE8E8EB),
+                                          borderRadius: BorderRadius.circular(9), // Sets corner radius
+                                        ),
+                                        padding: EdgeInsets.symmetric(horizontal: 20.0),
+                                        alignment: Alignment.centerLeft,
+                                        child: Row (
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                          Text(
+                                            subject,
+                                            style: TextStyle(fontFamily: 'Jost', fontSize: 14.0),
+                                          ),
+                                          Text (
+                                            '100 | A+',
+                                            style: TextStyle(fontFamily: 'Jost', fontSize: 14.0, fontWeight: FontWeight.bold, color: Color(0xFF283AA3)),
+                                          )
+                                        ],
+                                        ),
+                                      ),  
+                                      SizedBox(height: 12.0),
                                   ],
                                 );
                               }).toList(),
@@ -332,4 +374,3 @@ Widget buildInputField(String hintText, {bool isLarge = false, required TextEdit
 }
 
 // add my subject and line
-// add delete feature
