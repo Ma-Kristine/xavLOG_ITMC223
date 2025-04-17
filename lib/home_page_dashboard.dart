@@ -16,6 +16,17 @@ class _HomepageState extends State<Homepage> {
   String _description = '2 - BSIT';
   String _notifNumber = '3';
 
+  final _titleController = TextEditingController();
+  final _descriptionController = TextEditingController();
+  String _selectedCategory = 'Academic'; // Default category
+  DateTime _selectedDate = DateTime.now();
+
+  final List<String> _activityCategories = [
+    'Academic',
+    'Project',
+    'Organization',
+  ];
+
   final List<DashboardItem> navigationItems = [
     DashboardItem(
       title: 'Attendance Tracker',
@@ -93,6 +104,144 @@ class _HomepageState extends State<Homepage> {
     setState(() {
       _notifNumber = newNumber;
     });
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate,
+      firstDate: DateTime.now(),
+      lastDate: DateTime.now().add(const Duration(days: 365)),
+      builder: (context, child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            primaryColor: const Color(0xFF071D99),
+            colorScheme: const ColorScheme.light(primary: Color(0xFF071D99)),
+            buttonTheme: const ButtonThemeData(textTheme: ButtonTextTheme.primary),
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (picked != null && picked != _selectedDate) {
+      setState(() {
+        _selectedDate = picked;
+      });
+    }
+  }
+
+  void _showAddActivityDialog() {
+    final screenSize = MediaQuery.of(context).size;
+    final width = screenSize.width;
+    final fontSize = width * 0.03;
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            'Add New Activity',
+            style: TextStyle(
+              fontSize: fontSize * 1.3,
+              fontWeight: FontWeight.bold,
+              color: const Color(0xFF071D99),
+            ),
+          ),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: _titleController,
+                  decoration: const InputDecoration(
+                    labelText: 'Title',
+                    hintText: 'Enter activity title',
+                  ),
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: _descriptionController,
+                  decoration: const InputDecoration(
+                    labelText: 'Description',
+                    hintText: 'Enter activity description',
+                  ),
+
+                ),
+                const SizedBox(height: 16),
+                DropdownButtonFormField<String>(
+                  value: _selectedCategory,
+                  decoration: const InputDecoration(
+                    labelText: 'Category',
+                  ),
+                  items: _activityCategories.map((String category) {
+                    return DropdownMenuItem(
+                      value: category,
+                      child: Text(category),
+                    );
+                  }).toList(),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      _selectedCategory = newValue!;
+                    });
+                  },
+                ),
+                const SizedBox(height: 16),
+                ListTile(
+                  title: const Text('Date'),
+                  subtitle: Text(
+                    '${_selectedDate.month}/${_selectedDate.day}/${_selectedDate.year}',
+                  ),
+                  trailing: const Icon(Icons.calendar_today),
+                  onTap: () => _selectDate(context),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                _titleController.clear();
+                _descriptionController.clear();
+                _selectedCategory = 'Academic';
+                _selectedDate = DateTime.now();
+              },
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF071D99),
+              ),
+              onPressed: () {
+                if (_titleController.text.isNotEmpty) {
+                  setState(() {
+                    activities.add(
+                      Activity(
+                        title: _titleController.text,
+                        description: _descriptionController.text,
+                        date: _selectedDate,
+                        category: _selectedCategory,
+                      ),
+                    );
+                    // Sort activities by date
+                    activities.sort((a, b) => a.date.compareTo(b.date));
+                  });
+                  Navigator.pop(context);
+                  _titleController.clear();
+                  _descriptionController.clear();
+                  _selectedCategory = 'Academic';
+                  _selectedDate = DateTime.now();
+                }
+              },
+              child: const Text(
+                'Add Activity',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Widget _buildAnalyticsSummary() {
@@ -217,9 +366,7 @@ class _HomepageState extends State<Homepage> {
               ),
             ),
             GestureDetector(
-              onTap: () {
-                ////////////////////// Handle adding new activity /////////////////////
-              },
+              onTap: _showAddActivityDialog,
               child: Tooltip(
                 message: 'Add Activity',
                 child: CircleAvatar(
@@ -343,8 +490,6 @@ class _HomepageState extends State<Homepage> {
   }
 
   Drawer _buildMainMenuDrawer() {
-
-    
     return Drawer(
       child: Container(
         color: Colors.white,
@@ -372,7 +517,7 @@ class _HomepageState extends State<Homepage> {
                     _name,
                     style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 20,
+                      fontSize: 14,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'Jost',
                     ),
@@ -381,7 +526,7 @@ class _HomepageState extends State<Homepage> {
                     _description,
                     style: TextStyle(
                       color: Colors.white70,
-                      fontSize: 14,
+                      fontSize: 12,
                       fontFamily: 'Inter',
                     ),
                   ),
@@ -489,7 +634,7 @@ class _HomepageState extends State<Homepage> {
           children: [
             // Profile Section
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
+              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 32.0),
               margin: const EdgeInsets.symmetric(horizontal: 16.0),
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
@@ -532,7 +677,7 @@ class _HomepageState extends State<Homepage> {
                         Text(
                           'Hello, $_name', 
                           style: TextStyle(
-                            fontSize: fontSize * 1.2,
+                            fontSize: fontSize * 1.4,
                             fontWeight: FontWeight.bold,
                             fontFamily: 'Jost',
                             color: Colors.white,
@@ -542,7 +687,7 @@ class _HomepageState extends State<Homepage> {
                         Text(
                           _description,
                           style: TextStyle(
-                            fontSize: fontSize * 0.8,
+                            fontSize: fontSize * 1.2,
                             fontFamily: 'Inter',
                             fontWeight: FontWeight.w500,
                             color: Colors.white70,
@@ -596,29 +741,6 @@ class _HomepageState extends State<Homepage> {
                     ),
                   ),
                 ],
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
-            // Search Bar
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: 'Search...',
-                  hintStyle: const TextStyle(color: Color.fromARGB(179, 43, 75, 203)),
-                  prefixIcon: const Icon(Icons.search, color: Color.fromARGB(179, 43, 75, 203)),
-                  filled: true,
-                  fillColor: const Color.fromARGB(255, 255, 255, 255), // Dark blue
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                    borderSide: BorderSide(
-                      color: const Color.fromARGB(255, 17, 38, 179),
-                    ),
-                  ),
-                  contentPadding: const EdgeInsets.symmetric(vertical: 12),
-                ),
               ),
             ),
 
@@ -678,7 +800,7 @@ class _HomepageState extends State<Homepage> {
                                   Text(
                                     item.title,
                                     style: TextStyle(
-                                      fontSize: fontSize * 1.1,
+                                      fontSize: fontSize * 1,
                                       fontWeight: FontWeight.bold,
                                       fontFamily: 'Inter',
                                       color: Colors.white,
@@ -762,6 +884,13 @@ class _HomepageState extends State<Homepage> {
       default:
         return const SizedBox(); // Return an empty widget as fallback
     }
+  }
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
   }
 }
 

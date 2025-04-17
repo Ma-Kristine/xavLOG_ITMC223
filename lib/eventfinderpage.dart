@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'event_details_page.dart';
 
 class Category {
   final String name;
@@ -13,6 +14,9 @@ class Event {
   final String location;
   final DateTime date;
   final String imageUrl;
+  final String description;
+  bool isBookmarked;
+  bool isAttending;
 
   Event({
     required this.title,
@@ -20,6 +24,9 @@ class Event {
     required this.date,
     required this.location,
     required this.imageUrl,
+    required this.description,
+    this.isBookmarked = false,
+    this.isAttending = false,
   });
 }
 
@@ -34,7 +41,6 @@ class _EventFinderPageState extends State<EventFinderPage> {
   final TextEditingController _searchController = TextEditingController();
   String _selectedCategory = 'All';
 
-////////picsum for temp pics ////////////////
   final List<Category> _categories = [
     Category(name: 'All', imageUrl: 'https://picsum.photos/100'),
     Category(name: 'College', imageUrl: 'https://picsum.photos/100'),
@@ -44,7 +50,6 @@ class _EventFinderPageState extends State<EventFinderPage> {
     Category(name: 'External', imageUrl: 'https://picsum.photos/100'),
   ];
 
-  // Sample events data
   final List<Event> _events = [
     Event(
       title: 'College Fair 2024',
@@ -52,6 +57,7 @@ class _EventFinderPageState extends State<EventFinderPage> {
       date: DateTime.now(),
       location: 'Main Campus',
       imageUrl: 'https://picsum.photos/160/100',
+      description: 'A fair showcasing various colleges and their programs.',
     ),
     Event(
       title: 'Tech Summit',
@@ -59,8 +65,32 @@ class _EventFinderPageState extends State<EventFinderPage> {
       date: DateTime.now().add(const Duration(days: 1)),
       location: 'Innovation Hub',
       imageUrl: 'https://picsum.photos/160/100',
+      description: 'A summit for tech enthusiasts and professionals.',
     ),
-    //////////////////// Add more events as needed //////////////////////
+    Event(
+      title: 'Sports Festival',
+      category: 'School',
+      date: DateTime.now().add(const Duration(days: 2)),
+      location: 'Sports Complex',
+      imageUrl: 'https://picsum.photos/160/100',
+      description: 'Annual sports festival featuring various competitions.',
+    ),
+    Event(
+      title: 'Career Workshop',
+      category: 'Individual',
+      date: DateTime.now().add(const Duration(days: 3)),
+      location: 'Conference Hall',
+      imageUrl: 'https://picsum.photos/160/100',
+      description: 'Workshop on career development and job hunting.',
+    ),
+    Event(
+      title: 'Cultural Night',
+      category: 'Organization',
+      date: DateTime.now().add(const Duration(days: 4)),
+      location: 'Auditorium',
+      imageUrl: 'https://picsum.photos/160/100',
+      description: 'A celebration of diverse cultures and traditions.',
+    ),
   ];
 
   List<Event> _getFilteredEvents() {
@@ -70,14 +100,94 @@ class _EventFinderPageState extends State<EventFinderPage> {
     return _events.where((event) => event.category == _selectedCategory).toList();
   }
 
+  List<Event> _getSearchResults(String query) {
+    if (query.isEmpty) {
+      return _getFilteredEvents();
+    }
+    
+    final lowercaseQuery = query.toLowerCase();
+    return _getFilteredEvents().where((event) {
+      return event.title.toLowerCase().contains(lowercaseQuery) ||
+             event.category.toLowerCase().contains(lowercaseQuery) ||
+             event.location.toLowerCase().contains(lowercaseQuery) ||
+             event.description.toLowerCase().contains(lowercaseQuery);
+    }).toList();
+  }
+
+  List<Event> get bookmarkedEvents => _events.where((event) => event.isBookmarked).toList();
+
+  List<Event> get attendedEvents => _events.where((event) => event.isAttending).toList();
+
+  void _showBookmarkedEvents() {
+    final screenSize = MediaQuery.of(context).size;
+    final width = screenSize.width;
+    final fontSize = width * 0.03;
+    
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Container(
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: EdgeInsets.all(width * 0.04),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Bookmarked Events',
+                    style: TextStyle(
+                      fontSize: fontSize * 1.3,
+                      fontWeight: FontWeight.bold,
+                      color: const Color(0xFF071D99),
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.close),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ],
+              ),
+            ),
+            const Divider(height: 1),
+            Expanded(
+              child: bookmarkedEvents.isEmpty
+                  ? Center(
+                      child: Text(
+                        'No bookmarked events yet',
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: fontSize * 1.2,
+                        ),
+                      ),
+                    )
+                  : ListView.builder(
+                      itemCount: bookmarkedEvents.length,
+                      itemBuilder: (context, index) => _buildListEventCard(
+                        width,
+                        MediaQuery.of(context).size.height,
+                        bookmarkedEvents[index],
+                      ),
+                    ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
     final width = screenSize.width;
     final height = screenSize.height;
 
-    // Adjusted dimensions for better fit
-    final logoSize = width * 0.15; // Reduced from 0.45
+    final logoSize = width * 0.15;
     final fontSize = width * 0.03;
     final contentPadding = width * 0.02;
 
@@ -127,7 +237,7 @@ class _EventFinderPageState extends State<EventFinderPage> {
                                       'Hello, Francis',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
-                                        fontSize: fontSize * 1.2,
+                                        fontSize: fontSize * 1.4,
                                         color: Colors.white,
                                       ),
                                       overflow: TextOverflow.ellipsis,
@@ -136,7 +246,7 @@ class _EventFinderPageState extends State<EventFinderPage> {
                                       '2-BSIT',
                                       style: TextStyle(
                                         color: Colors.white70,
-                                        fontSize: fontSize,
+                                        fontSize: fontSize * 1.2,
                                       ),
                                       overflow: TextOverflow.ellipsis,
                                     ),
@@ -145,7 +255,7 @@ class _EventFinderPageState extends State<EventFinderPage> {
                               ),
                               SizedBox(width: width * 0.03),
                               CircleAvatar(
-                                radius: width * 0.04,
+                                radius: width * 0.08,
                                 backgroundImage: const NetworkImage('https://picsum.photos/100'),
                               ),
                             ],
@@ -154,14 +264,28 @@ class _EventFinderPageState extends State<EventFinderPage> {
                       ],
                     ),
                     SizedBox(height: height * 0.02),
-                    // Search TextField
                     TextField(
                       controller: _searchController,
                       style: TextStyle(fontSize: fontSize),
+                      onChanged: (value) {
+                        setState(() {
+                          // Trigger rebuild when search text changes
+                        });
+                      },
                       decoration: InputDecoration(
-                        hintText: 'Search events',
+                        hintText: 'Search events by name, category, or location',
                         hintStyle: TextStyle(fontSize: fontSize),
                         prefixIcon: Icon(Icons.search, size: fontSize * 1.2),
+                        suffixIcon: _searchController.text.isNotEmpty
+                            ? IconButton(
+                                icon: Icon(Icons.clear, size: fontSize * 1.2),
+                                onPressed: () {
+                                  setState(() {
+                                    _searchController.clear();
+                                  });
+                                },
+                              )
+                            : null,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(25),
                           borderSide: BorderSide.none,
@@ -177,8 +301,6 @@ class _EventFinderPageState extends State<EventFinderPage> {
                   ],
                 ),
               ),
-
-              // Categories Section
               Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: contentPadding * 2,
@@ -187,6 +309,7 @@ class _EventFinderPageState extends State<EventFinderPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    SizedBox(height: height * 0.02),
                     Text(
                       'Categories',
                       style: TextStyle(
@@ -247,8 +370,6 @@ class _EventFinderPageState extends State<EventFinderPage> {
                   ],
                 ),
               ),
-
-              // Just Announced Section starts immediately after
               ..._buildEventSections(width, height),
             ],
           ),
@@ -257,59 +378,290 @@ class _EventFinderPageState extends State<EventFinderPage> {
     );
   }
 
-  // Helper method to build event sections
   List<Widget> _buildEventSections(double width, double height) {
     final fontSize = width * 0.03;
-    final filteredEvents = _getFilteredEvents();
-    final sectionTitles = ['Just Announced', 'Your Events', 'Calendar Events'];
+    final searchQuery = _searchController.text;
+    final filteredEvents = _getSearchResults(searchQuery);
+    final attending = attendedEvents;
 
-    return sectionTitles.map((title) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: width * 0.04,
-              vertical: height * 0.01,
+    // My Events section
+    Widget myEventsSection = _buildSectionWithHeader(
+      'My Events',
+      attending,
+      width,
+      height,
+      fontSize,
+      true,
+    );
+
+    // Just Announced section
+    Widget justAnnouncedSection = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: width * 0.04,
+            vertical: height * 0.01,
+          ),
+          child: Text(
+            'Just Announced',
+            style: TextStyle(
+              fontSize: fontSize * 1.3,
+              fontWeight: FontWeight.bold,
+              color: const Color(0xFF071D99),
             ),
-            child: Text(
-              title,
-              style: TextStyle(
-                fontSize: fontSize * 1.3,
-                fontWeight: FontWeight.bold,
-                color: const Color(0xFF071D99),
+          ),
+        ),
+        ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: filteredEvents.length,
+          itemBuilder: (context, index) => _buildListEventCard(
+            width,
+            height,
+            filteredEvents[index],
+          ),
+        ),
+      ],
+    );
+
+    return [
+      myEventsSection,
+      justAnnouncedSection,
+    ];
+  }
+
+  Widget _buildSectionWithHeader(
+    String title,
+    List<Event> events,
+    double width,
+    double height,
+    double fontSize,
+    bool isHorizontalScroll,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: width * 0.04,
+            vertical: height * 0.01,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: fontSize * 1.3,
+                  fontWeight: FontWeight.bold,
+                  color: const Color(0xFF071D99),
+                ),
+              ),
+              // Add bookmark icon only for My Events section
+              if (title == 'My Events')
+                GestureDetector(
+                  onTap: _showBookmarkedEvents,
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      Icon(
+                        Icons.bookmark,
+                        color: const Color(0xFF071D99),
+                        size: fontSize * 1.8,
+                      ),
+                      if (bookmarkedEvents.isNotEmpty)
+                        Positioned(
+                          top: -8,
+                          right: -8,
+                          child: Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: const BoxDecoration(
+                              color: Color(0xFFD7A61F),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Text(
+                              bookmarkedEvents.length.toString(),
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: fontSize * 0.8,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+            ],
+          ),
+        ),
+        if (events.isEmpty)
+          Center(
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: height * 0.02),
+              child: Text(
+                'No ${title.toLowerCase()} yet',
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: fontSize * 1.2,
+                ),
               ),
             ),
-          ),
+          )
+        else if (isHorizontalScroll)
           SizedBox(
             height: height * 0.25,
-            child: filteredEvents.isEmpty
-                ? Center(
-                    child: Text(
-                      'No events found for $_selectedCategory',
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              padding: EdgeInsets.symmetric(horizontal: width * 0.04),
+              itemCount: events.length,
+              itemBuilder: (context, index) => _buildEventCard(
+                width,
+                height,
+                index,
+                title,
+                events[index],
+              ),
+            ),
+          )
+        else
+          ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: events.take(3).length,
+            itemBuilder: (context, index) => _buildListEventCard(
+              width,
+              height,
+              events[index],
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget _buildListEventCard(double width, double height, Event event) {
+    final fontSize = width * 0.03;
+    final contentPadding = width * 0.04;
+    final imageSize = width * 0.2;
+
+    return Container(
+      margin: EdgeInsets.symmetric(
+        horizontal: contentPadding,
+        vertical: height * 0.01,
+      ),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 5,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => EventDetailsPage(
+                event: event,
+                onBookmarkChanged: (bool isBookmarked) {
+                  setState(() {
+                    event.isBookmarked = isBookmarked;
+                  });
+                  _saveBookmarkedEvents();
+                },
+                onAttendingChanged: (bool isAttending) {
+                  setState(() {
+                    event.isAttending = isAttending;
+                  });
+                  _saveAttendedEvents();
+                },
+              ),
+            ),
+          );
+        },
+        child: Padding(
+          padding: EdgeInsets.all(contentPadding * 0.5),
+          child: Row(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image.network(
+                  event.imageUrl,
+                  width: imageSize,
+                  height: imageSize,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              SizedBox(width: width * 0.03),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      event.title,
                       style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: fontSize * 1.2,
+                        fontWeight: FontWeight.bold,
+                        fontSize: fontSize * 1.1,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    SizedBox(height: height * 0.005),
+                    Text(
+                      event.date.toString().split(' ')[0],
+                      style: TextStyle(
+                        color: Colors.grey[600],
+                        fontSize: fontSize,
                       ),
                     ),
-                  )
-                : ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    padding: EdgeInsets.symmetric(horizontal: width * 0.04),
-                    itemCount: filteredEvents.length,
-                    itemBuilder: (context, index) => _buildEventCard(
-                      width,
-                      height,
-                      index,
-                      title,
-                      filteredEvents[index],
+                    Text(
+                      event.location,
+                      style: TextStyle(
+                        color: Colors.grey[600],
+                        fontSize: fontSize,
+                      ),
                     ),
+                  ],
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    event.isAttending = !event.isAttending;
+                  });
+                  _saveAttendedEvents();
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: event.isAttending 
+                      ? const Color(0xFFD7A61F)
+                      : const Color(0xFF071D99),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: contentPadding * 0.8,
+                    vertical: contentPadding * 0.4,
                   ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: Text(
+                  event.isAttending ? 'Attending' : 'Attend',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: fontSize * 0.9,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
           ),
-          SizedBox(height: height * 0.02),
-        ],
-      );
-    }).toList();
+        ),
+      ),
+    );
   }
 
   Widget _buildEventCard(
@@ -325,108 +677,143 @@ class _EventFinderPageState extends State<EventFinderPage> {
     final contentPadding = width * 0.03;
     final iconSize = width * 0.05;
 
-    return Container(
-      width: cardWidth,
-      height: cardHeight,
-      margin: EdgeInsets.only(right: width * 0.04),
-      child: Card(
-        elevation: 2,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Stack(
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ClipRRect(
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-                  child: Image.network(
-                    event.imageUrl,
-                    height: imageHeight,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Container(
-                        height: imageHeight,
-                        color: Colors.grey[200],
-                        child: Icon(
-                          Icons.image_not_supported,
-                          size: iconSize * 2,
-                          color: Colors.grey[400],
-                        ),
-                      );
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => EventDetailsPage(
+              event: event,
+              onBookmarkChanged: (bool isBookmarked) {
+                setState(() {
+                  event.isBookmarked = isBookmarked;
+                });
+                _saveBookmarkedEvents();
+              },
+              onAttendingChanged: (bool isAttending) {
+                setState(() {
+                  event.isAttending = isAttending;
+                });
+                _saveAttendedEvents();
+              },
+            ),
+          ),
+        );
+      },
+      child: Container(
+        width: cardWidth,
+        height: cardHeight,
+        margin: EdgeInsets.only(right: width * 0.04),
+        child: Card(
+          elevation: 2,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Stack(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ClipRRect(
+                    borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                    child: Image.network(
+                      event.imageUrl,
+                      height: imageHeight,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Container(
+                          height: imageHeight,
+                          color: Colors.grey[200],
+                          child: Icon(
+                            Icons.image_not_supported,
+                            size: iconSize * 2,
+                            color: Colors.grey[400],
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.all(contentPadding),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Text(
+                            event.title,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: width * 0.035,
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                            event.date.toString().split(' ')[0],
+                            style: TextStyle(
+                              color: Colors.grey[600],
+                              fontSize: width * 0.03,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                            event.location,
+                            style: TextStyle(
+                              color: Colors.grey[600],
+                              fontSize: width * 0.03,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Positioned(
+                top: contentPadding,
+                right: contentPadding,
+                child: Container(
+                  padding: EdgeInsets.all(contentPadding * 0.5),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.9),
+                    borderRadius: BorderRadius.circular(iconSize),
+                  ),
+                  child: IconButton(
+                    icon: Icon(
+                      event.isBookmarked ? Icons.bookmark : Icons.bookmark_border,
+                      color: const Color(0xFF071D99),
+                      size: iconSize,
+                    ),
+                    padding: EdgeInsets.zero,
+                    constraints: BoxConstraints(
+                      minWidth: iconSize * 1.5,
+                      minHeight: iconSize * 1.5,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        event.isBookmarked = !event.isBookmarked;
+                      });
+                      _saveBookmarkedEvents();
                     },
                   ),
                 ),
-                Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.all(contentPadding),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Text(
-                          event.title,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: width * 0.035,
-                          ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        Text(
-                          event.date.toString().split(' ')[0],
-                          style: TextStyle(
-                            color: Colors.grey[600],
-                            fontSize: width * 0.03,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        Text(
-                          event.location,
-                          style: TextStyle(
-                            color: Colors.grey[600],
-                            fontSize: width * 0.03,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Positioned(
-              top: contentPadding,
-              right: contentPadding,
-              child: Container(
-                padding: EdgeInsets.all(contentPadding * 0.5),
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.9),
-                  borderRadius: BorderRadius.circular(iconSize),
-                ),
-                child: IconButton(
-                  icon: Icon(
-                    Icons.bookmark_border,
-                    color: const Color(0xFF071D99),
-                    size: iconSize,
-                  ),
-                  padding: EdgeInsets.zero,
-                  constraints: BoxConstraints(
-                    minWidth: iconSize * 1.5,
-                    minHeight: iconSize * 1.5,
-                  ),
-                  onPressed: () {
-                    // Add bookmark functionality
-                  },
-                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  void _saveBookmarkedEvents() {
+    //////save to firebase
+  }
+
+  void _saveAttendedEvents() {
+    //////save to firebase
   }
 
   @override

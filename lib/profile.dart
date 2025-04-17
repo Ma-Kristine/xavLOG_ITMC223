@@ -14,7 +14,7 @@ class _ProfilePageState extends State<ProfilePage> {
   final _formKey = GlobalKey<FormState>();
   bool _isEditing = false;
   String name = 'John Doe';
-  String description = 'Admin';
+  String description = 'Student';
   String contact = '+1 234 567 8900';
   String email = 'john.doe@example.com';
   String department = 'Computer Science';
@@ -76,7 +76,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   Text(
                     name,
                     style: TextStyle(
-                      fontSize: fontSize * 1.5, // 24 -> fontSize * 1.5
+                      fontSize: fontSize * 1.2, // 24 -> fontSize * 1.5
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),
@@ -379,14 +379,14 @@ class _ProfilePageState extends State<ProfilePage> {
                   label,
                   style: TextStyle(
                     color: Colors.grey,
-                    fontSize: fontSize * 0.8, // 14 -> fontSize * 0.8
+                    fontSize: fontSize * 0.8,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   value,
                   style: TextStyle(
-                    fontSize: fontSize, // 16 -> fontSize
+                    fontSize: fontSize * 1.2, 
                     fontWeight: FontWeight.w500,
                     color: Colors.black,
                   ),

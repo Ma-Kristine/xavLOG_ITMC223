@@ -70,46 +70,52 @@ class _LoginPageState extends State<LoginPage> {
                           fontWeight: FontWeight.w900,
                         ),
                       ),
-                      // Email field
-                      SizedBox(
-                        width: buttonWidth * 2,
-                        child: TextField(
-                          style: TextStyle(fontSize: fontSize * 1.2),
-                          decoration: InputDecoration(
-                            labelText: 'Email Address',
-                            labelStyle: TextStyle(fontSize: fontSize * 1.2),
-                            suffixIcon: Icon(
-                              Icons.email,
-                              size: fontSize * 1.4,
-                            ),
-                          ),
-                        ),
-                      ),
-                      // Password field
-                      SizedBox(
-                        width: buttonWidth * 2,
-                        child: TextField(
-                          style: TextStyle(fontSize: fontSize * 1.2),
-                          obscureText: !isPasswordVisible,
-                          decoration: InputDecoration(
-                            labelText: 'Password',
-                            labelStyle: TextStyle(fontSize: fontSize * 1.2),
-                            suffixIcon: MouseRegion(
-                              cursor: SystemMouseCursors.click,
-                              child: GestureDetector(
-                                onTap: () => setState(() => 
-                                  isPasswordVisible = !isPasswordVisible
-                                ),
-                                child: Icon(
-                                  isPasswordVisible 
-                                      ? Icons.visibility 
-                                      : Icons.visibility_off,
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          // Email field
+                          SizedBox(
+                            width: buttonWidth * 2,
+                            child: TextField(
+                              style: TextStyle(fontSize: fontSize * 1.2),
+                              decoration: InputDecoration(
+                                labelText: 'Email Address',
+                                labelStyle: TextStyle(fontSize: fontSize * 1.2),
+                                suffixIcon: Icon(
+                                  Icons.email,
                                   size: fontSize * 1.4,
                                 ),
                               ),
                             ),
                           ),
-                        ),
+                          SizedBox(height: height * 0.02), // Reduced spacing between fields
+                          // Password field
+                          SizedBox(
+                            width: buttonWidth * 2,
+                            child: TextField(
+                              style: TextStyle(fontSize: fontSize * 1.2),
+                              obscureText: !isPasswordVisible,
+                              decoration: InputDecoration(
+                                labelText: 'Password',
+                                labelStyle: TextStyle(fontSize: fontSize * 1.2),
+                                suffixIcon: MouseRegion(
+                                  cursor: SystemMouseCursors.click,
+                                  child: GestureDetector(
+                                    onTap: () => setState(() => 
+                                      isPasswordVisible = !isPasswordVisible
+                                    ),
+                                    child: Icon(
+                                      isPasswordVisible 
+                                          ? Icons.visibility 
+                                          : Icons.visibility_off,
+                                      size: fontSize * 1.4,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                       SizedBox(height: height * 0.03),
                       MouseRegion(
@@ -153,7 +159,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                       ),
-                      SizedBox(height: height * 0.03),
+
                       Text(
                         'Please use your assigned GBOX account to Log-in',
                         textAlign: TextAlign.center,
