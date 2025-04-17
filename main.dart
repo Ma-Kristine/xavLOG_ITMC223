@@ -7,8 +7,8 @@
     If a partition has sub-parts (e.g., quizzes under class standing), users can break it down further. 
     The system calculates the Cumulative Final Rating Score (CFRS), letter grade, numerical grade, and overall QPI based on the data. 
     Users can add, edit, or delete partitions anytime.
-   */
-  
+*/
+
 import 'package:flutter/material.dart';
 
 void main() {
@@ -73,6 +73,7 @@ class _AddSubjectScreenState extends State<AddSubjectScreen> {
             toolbarHeight: 60.0,
           ),
           
+          resizeToAvoidBottomInset: false,
           body:
           Stack(
             children: [
@@ -373,4 +374,4 @@ Widget buildInputField(String hintText, {bool isLarge = false, required TextEdit
   );
 }
 
-// add my subject and line
+// next sprint: delete feature and computation
