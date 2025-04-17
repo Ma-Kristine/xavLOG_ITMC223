@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'profile.dart';
 import 'eventfinderpage.dart';
 import 'login_page.dart';
+import 'faqs.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -95,16 +96,20 @@ class _HomepageState extends State<Homepage> {
   }
 
   Widget _buildAnalyticsSummary() {
+    final screenSize = MediaQuery.of(context).size;
+    final width = screenSize.width;
+    final fontSize = width * 0.03;
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Monthly Analytics',
             style: TextStyle(
-              fontSize: 20,
+              fontSize: fontSize * 1.2,
               fontWeight: FontWeight.bold,
               fontFamily: 'Jost',
               color: Color(0xFF071D99),
@@ -128,11 +133,11 @@ class _HomepageState extends State<Homepage> {
                     childAspectRatio: 1.5,
                     children: [
                       /////////////// chnage numbers according to computations of analytics //////////////
-                      _buildStatCard('Total Classes', '28', Icons.class_),
-                      _buildStatCard('Total Attendance', '85%', Icons.calendar_view_day),
-                      _buildStatCard('Classes', '24/28', Icons.class_),
-                      _buildStatCard('Performance', 'Good', Icons.trending_up),
-                      _buildStatCard('Status', 'On Track', Icons.check_circle),
+                      _buildStatCard('Total Classes', '28', Icons.class_, fontSize * 1.2),
+                      _buildStatCard('Total Attendance', '85%', Icons.calendar_view_day, fontSize * 1.2),
+                      _buildStatCard('Classes', '24/28', Icons.class_, fontSize * 1.2),
+                      _buildStatCard('Performance', 'Good', Icons.trending_up, fontSize * 1.2),
+                      _buildStatCard('Status', 'On Track', Icons.check_circle, fontSize * 1.2),
                     ],
                   ),
                   const Divider(),
@@ -154,7 +159,7 @@ class _HomepageState extends State<Homepage> {
     );
   }
 
-  Widget _buildStatCard(String title, String value, IconData icon) {
+  Widget _buildStatCard(String title, String value, IconData icon, double fontSize) {
     return Card(
       elevation: 2,
       color: Colors.white,
@@ -169,8 +174,8 @@ class _HomepageState extends State<Homepage> {
           const SizedBox(height: 8),
           Text(
             value,
-            style: const TextStyle(
-              fontSize: 18,
+            style: TextStyle(
+              fontSize: fontSize * 1.2,
               fontWeight: FontWeight.bold,
               fontFamily: 'Jost',
               color: Color(0xFF071D99),
@@ -178,8 +183,8 @@ class _HomepageState extends State<Homepage> {
           ),
           Text(
             title,
-            style: const TextStyle(
-              fontSize: 14, 
+            style: TextStyle(
+              fontSize: fontSize * 0.8,
               fontFamily: 'Inter',
               color: Colors.grey
             ),
@@ -190,6 +195,10 @@ class _HomepageState extends State<Homepage> {
   }
 
   Widget _buildUpcomingActivities() {
+    final screenSize = MediaQuery.of(context).size;
+    final width = screenSize.width;
+    final fontSize = width * 0.03;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
@@ -198,10 +207,10 @@ class _HomepageState extends State<Homepage> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
+            Text(
               'Upcoming Activities',
               style: TextStyle(
-                fontSize: 20,
+                fontSize: fontSize * 1.2,
                 fontWeight: FontWeight.bold,
                 fontFamily: 'Jost',
                 color: Color(0xFF071D99),
@@ -411,7 +420,11 @@ class _HomepageState extends State<Homepage> {
               title: const Text('Help & Support'),
               onTap: () {
                 ///////////////// Handle FAQs, open FAQs page ////////////////////////
-                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const FAQs()
+                  ),
+                );
               },
             ),
             ListTile(
@@ -463,6 +476,10 @@ class _HomepageState extends State<Homepage> {
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+    final width = screenSize.width;
+    final fontSize = width * 0.03;
+
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255), // Blue background
       drawer: _buildMainMenuDrawer(),
@@ -514,8 +531,8 @@ class _HomepageState extends State<Homepage> {
                       children: [
                         Text(
                           'Hello, $_name', 
-                          style: const TextStyle(
-                            fontSize: 22,
+                          style: TextStyle(
+                            fontSize: fontSize * 1.2,
                             fontWeight: FontWeight.bold,
                             fontFamily: 'Jost',
                             color: Colors.white,
@@ -525,7 +542,7 @@ class _HomepageState extends State<Homepage> {
                         Text(
                           _description,
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: fontSize * 0.8,
                             fontFamily: 'Inter',
                             fontWeight: FontWeight.w500,
                             color: Colors.white70,
@@ -618,10 +635,10 @@ class _HomepageState extends State<Homepage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     'Where Do You Want To Go?',
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: fontSize * 1.2,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'Jost',
                       color: Color(0xFF071D99),
@@ -660,8 +677,8 @@ class _HomepageState extends State<Homepage> {
                                   const SizedBox(height: 12),
                                   Text(
                                     item.title,
-                                    style: const TextStyle(
-                                      fontSize: 14,
+                                    style: TextStyle(
+                                      fontSize: fontSize * 1.1,
                                       fontWeight: FontWeight.bold,
                                       fontFamily: 'Inter',
                                       color: Colors.white,
@@ -688,10 +705,10 @@ class _HomepageState extends State<Homepage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     'Your Calendar',
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: fontSize * 1.2,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'Jost',
                       color: Color(0xFF071D99),

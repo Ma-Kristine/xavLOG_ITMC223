@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'account_choose.dart';
 import 'signin_page.dart';
+import 'home_page_dashboard.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -9,275 +9,256 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  bool isSignInHovered = false;
+  bool isLoginHovered = false;
   bool isTermsHovered = false;
   bool isFAQsHovered = false;
   bool isPasswordVisible = false;
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+    final width = screenSize.width;
+    final height = screenSize.height;
+
+    // Adjusted responsive dimensions
+    final logoSize = width * 0.45;
+    final buttonWidth = width * 0.30;
+    final contentPadding = width * 0.02;
+    final fontSize = width * 0.03; // Reduced for better scaling
+
     return Scaffold(
-      body: SingleChildScrollView(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            minHeight: MediaQuery.of(context).size.height,
+      body: Container(
+        width: width,
+        height: height,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFF132BB2),
+              Color(0xFFD7A61F),
+            ],
           ),
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Color(0xFF132BB2),
-                  Color(0xFF132BB2),
-                  Color(0xFFD7A61F),
-                  Color(0xFFD7A61F),
-                ],
-              ),
+        ),
+        child: Column(
+          children: [
+            SizedBox(height: height * 0.02),
+            Image.asset(
+              'images/fulllogo.png',
+              width: logoSize,
+              height: logoSize,
             ),
-            child: Column(
-              children: [
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.15),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+            SizedBox(height: height * 0.02),
+            Expanded(
+              child: ClipPath(
+                clipper: TrianglePeekClipper(),
+                child: Container(
+                  width: width,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFFFFFF),
+                    borderRadius: BorderRadius.circular(width * 0.01),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      SizedBox(
-                        height: 50,
-                        width: 50,
-                        child: Image.asset('images/xavloglogo.png', fit: BoxFit.contain),
+                      SizedBox(height: height * 0.02),
+                      Text(
+                        'Log-in',
+                        style: TextStyle(
+                          color: const Color(0xFF071D99),
+                          fontSize: fontSize * 2,
+                          fontWeight: FontWeight.w900,
+                        ),
                       ),
-                      SizedBox(width: 10),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'xavLog',
-                            style: TextStyle(
-                              color: Color(0xFFD7A61F),
-                              fontStyle: FontStyle.italic,
-                              fontFamily: 'Jost',
-                              fontSize: 25,
-                              fontWeight: FontWeight.w800,
+                      // Email field
+                      SizedBox(
+                        width: buttonWidth * 2,
+                        child: TextField(
+                          style: TextStyle(fontSize: fontSize * 1.2),
+                          decoration: InputDecoration(
+                            labelText: 'Email Address',
+                            labelStyle: TextStyle(fontSize: fontSize * 1.2),
+                            suffixIcon: Icon(
+                              Icons.email,
+                              size: fontSize * 1.4,
                             ),
                           ),
+                        ),
+                      ),
+                      // Password field
+                      SizedBox(
+                        width: buttonWidth * 2,
+                        child: TextField(
+                          style: TextStyle(fontSize: fontSize * 1.2),
+                          obscureText: !isPasswordVisible,
+                          decoration: InputDecoration(
+                            labelText: 'Password',
+                            labelStyle: TextStyle(fontSize: fontSize * 1.2),
+                            suffixIcon: MouseRegion(
+                              cursor: SystemMouseCursors.click,
+                              child: GestureDetector(
+                                onTap: () => setState(() => 
+                                  isPasswordVisible = !isPasswordVisible
+                                ),
+                                child: Icon(
+                                  isPasswordVisible 
+                                      ? Icons.visibility 
+                                      : Icons.visibility_off,
+                                  size: fontSize * 1.4,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: height * 0.03),
+                      MouseRegion(
+                        cursor: SystemMouseCursors.click,
+                        onEnter: (_) => setState(() => isLoginHovered = true),
+                        onExit: (_) => setState(() => isLoginHovered = false),
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const Homepage(),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            alignment: Alignment.center,
+                            width: buttonWidth * 2,
+                            padding: EdgeInsets.all(contentPadding),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(width * 0.01),
+                              gradient: LinearGradient(
+                                colors: [
+                                  isLoginHovered
+                                      ? const Color(0xFF3352DF)
+                                      : const Color(0xFF071D99),
+                                  isLoginHovered
+                                      ? const Color(0xFF3352DF)
+                                      : const Color(0xFF071D99),
+                                ],
+                              ),
+                            ),
+                            child: Text(
+                              'Log-in',
+                              style: TextStyle(
+                                color: const Color(0xFFFFFFFF),
+                                fontSize: fontSize * 1.2,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: height * 0.03),
+                      Text(
+                        'Please use your assigned GBOX account to Log-in',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: fontSize,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      SizedBox(height: height * 0.02),
+                      // Create account row
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
                           Text(
-                            'Your Campus Tether',
+                            'Don\'t have an account yet? ',
                             style: TextStyle(
-                              color: Color(0xFFD7A61F),
-                              fontFamily: 'Jost',
-                              fontSize: 12,
+                              color: Colors.grey,
+                              fontSize: fontSize,
                               fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          MouseRegion(
+                            cursor: SystemMouseCursors.click,
+                            onEnter: (_) => setState(() => isTermsHovered = true),
+                            onExit: (_) => setState(() => isTermsHovered = false),
+                            child: GestureDetector(
+                              onTap: () => _showCreateAccountDialog(context, fontSize),
+                              child: Text(
+                                'Create now',
+                                style: TextStyle(
+                                  color: isTermsHovered 
+                                      ? const Color(0xFF0529CC) 
+                                      : const Color(0xFF071D99),
+                                  fontSize: fontSize,
+                                  fontWeight: FontWeight.w800,
+                                ),
+                              ),
                             ),
                           ),
                         ],
                       ),
+                      SizedBox(height: height * 0.02),
                     ],
                   ),
                 ),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                ClipPath(
-                  clipper: TrianglePeekClipper(),
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    constraints: BoxConstraints(
-                      minHeight: MediaQuery.of(context).size.height * 0.75,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Color(0xFFFFFFFF),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SizedBox(height: MediaQuery.of(context).size.height * 0.08),
-                        Text(
-                          'Log-in',
-                          style: TextStyle(
-                            color: Color(0xFF071D99),
-                            fontSize: 30,
-                            fontWeight: FontWeight.w900,
-                          ),
-                        ),
-                        SizedBox(height: 20),
-                        SizedBox(
-                          width: 250,
-                          child: TextField(
-                            decoration: InputDecoration(
-                              labelText: 'Email Address',
-                              suffixIcon: Icon(
-                                Icons.email,
-                                size: 17,
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 250,
-                          child: TextField(
-                            obscureText: !isPasswordVisible,
-                            decoration: InputDecoration(
-                              labelText: 'Password',
-                              suffixIcon: MouseRegion(
-                                cursor: SystemMouseCursors.click,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      isPasswordVisible = !isPasswordVisible;
-                                    });
-                                  },
-                                  child: Icon(
-                                    isPasswordVisible ? Icons.visibility : Icons.visibility_off,
-                                    size: 17,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 30),
-                        MouseRegion(
-                          cursor: SystemMouseCursors.click,
-                          onEnter: (_) => setState(() => isSignInHovered = true),
-                          onExit: (_) => setState(() => isSignInHovered = false),
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => AccountChoosePage(),
-                                ),
-                              );
-                            },
-                            child: Container(
-                              alignment: Alignment.center,
-                              width: 250,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                gradient: LinearGradient(
-                                  colors: [
-                                    isSignInHovered ? Color(0xFF0529CC) : Color(0xFF071D99),
-                                    isSignInHovered ? Color(0xFF0529CC) : Color(0xFF071D99),
-                                  ],
-                                ),
-                              ),
-                              child: Padding(
-                                padding: EdgeInsets.all(12),
-                                child: Text(
-                                  'Log In',
-                                  style: TextStyle(
-                                    color: Color(0xFFFFFFFF),
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 30),
-                        Container(
-                          alignment: Alignment.center,
-                          width: double.infinity,
-                          child: Text(
-                            'Please use your assigned GBOX account to sign in',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 100),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Don\'t have an account yet?',
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            SizedBox(width: 5),
-                            MouseRegion(
-                              cursor: SystemMouseCursors.click,
-                              onEnter: (_) => setState(() => isTermsHovered = true),
-                              onExit: (_) => setState(() => isTermsHovered = false),
-                              child: GestureDetector(
-                                onTap: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        title: Text(
-                                          'Create Account',
-                                          style: TextStyle(
-                                            color: Color(0xFF071D99),
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        content: Text('Do you want to create a new account?'),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: () {
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) => SigninPage(),
-                                                ),
-                                              );
-                                            },
-                                            child: Text(
-                                              'Yes',
-                                              style: TextStyle(
-                                                color: Color(0xFF071D99),
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                          TextButton(
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                            child: Text(
-                                              'No',
-                                              style: TextStyle(
-                                                color: Color(0xFF071D99),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                },
-                                child: Text(
-                                  'Create now',
-                                  style: TextStyle(
-                                    color: isTermsHovered ? Color(0xFF0529CC) : Color(0xFF071D99),
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w800,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
+    );
+  }
+
+  void _showCreateAccountDialog(BuildContext context, double fontSize) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            'Create Account',
+            style: TextStyle(
+              color: const Color(0xFF071D99),
+              fontWeight: FontWeight.bold,
+              fontSize: fontSize * 1.5,
+            ),
+          ),
+          content: Text(
+            'Do you want to create a new account?',
+            style: TextStyle(fontSize: fontSize),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SigninPage(),
+                  ),
+                );
+              },
+              child: Text(
+                'Yes',
+                style: TextStyle(
+                  color: const Color(0xFF071D99),
+                  fontWeight: FontWeight.bold,
+                  fontSize: fontSize,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text(
+                'No',
+                style: TextStyle(
+                  color: const Color(0xFF071D99),
+                  fontSize: fontSize,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
@@ -286,11 +267,12 @@ class TrianglePeekClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
     Path path = Path();
-    
-    double triangleHeight = 130.0;
+
+    // Make triangle height responsive
+    double triangleHeight = size.height * 0.15; // 15% of container height
     double triangleWidth = size.width;
     double startY = triangleHeight;
-    
+
     path.moveTo(0, startY);
     path.lineTo(triangleWidth / 2, 0);
     path.lineTo(triangleWidth, startY);

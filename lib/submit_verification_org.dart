@@ -93,7 +93,7 @@ class VerificationPage extends StatelessWidget {
                         ),
                         const SizedBox(height: 20),
                         Text(
-                          'We\'ll send a confirmation email to:\n${email}',
+                          'We\'ll send a confirmation email to:\n$email',
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             fontSize: 16,

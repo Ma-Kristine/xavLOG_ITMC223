@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:xavlogsigninpage/profile_organization.dart';
 import 'package:xavlogsigninpage/signin_page.dart';
-import 'profile_elements.dart';
+import 'student_profile_elements.dart';
 
 class AccountChoosePage extends StatefulWidget {
   const AccountChoosePage({super.key});
@@ -10,6 +10,9 @@ class AccountChoosePage extends StatefulWidget {
 }
 
 class _AccountChoosePageState extends State<AccountChoosePage> {
+  // Add a variable to track selected account type
+  String? selectedAccount;
+
   //boolean variables for hover effect
   bool isSignInHovered = false;
   bool isTermsHovered = false;
@@ -18,6 +21,17 @@ class _AccountChoosePageState extends State<AccountChoosePage> {
 
   @override
   Widget build(BuildContext context) {
+
+    final screenSize = MediaQuery.of(context).size;
+    final width = screenSize.width;
+    final height = screenSize.height;
+
+     // Calculate responsive dimensions
+    final logoSize = width * 0.45; // 45% of screen width
+    final buttonWidth = width * 0.30; // 20% of screen width
+    final contentPadding = width * 0.01; // 2% of screen width
+    final fontSize = width * 0.03; 
+
     return Scaffold(
       body: LayoutBuilder(
         builder: (context, constraints) {
@@ -33,9 +47,7 @@ class _AccountChoosePageState extends State<AccountChoosePage> {
                   end: Alignment.bottomCenter,
                   colors: [
                     Color(0xFF132BB2),
-                    Color(0xFF132BB2),
-                    Color(0xFFFFFFFF),
-                    Color(0xFFFFFFFF),
+                    Color(0xFFD7A61F),
                   ],
                 ),
               ),
@@ -43,49 +55,26 @@ class _AccountChoosePageState extends State<AccountChoosePage> {
                 children: [
                   Container(
                     width: MediaQuery.of(context).size.width,
-                    padding: EdgeInsets.only(top: constraints.maxHeight * 0.15),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                    padding: EdgeInsets.only(top: constraints.maxHeight * 0.02),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(
-                          height: 50,
-                          width: 50,
-                          child: Image.asset('images/xavloglogo.png', fit: BoxFit.contain),
-                        ),
-                        SizedBox(width: 10),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'xavLog',
-                              style: TextStyle(
-                                color: Color(0xFFD7A61F),
-                                fontStyle: FontStyle.italic,
-                                fontFamily: 'Jost',
-                                fontSize: 25,
-                                fontWeight: FontWeight.w800,
-                              ),
-                            ),
-                            Text(
-                              'Your Campus Tether',  // Add your desired phrase here
-                              style: TextStyle(
-                                color: Color(0xFFD7A61F),
-                                fontFamily: 'Inter',
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
+                        SizedBox(height: height * 0.03),
+                        Center( //XAVLOG LOGO
+                          child: Image.asset(
+                            'images/fulllogo.png',
+                            width: logoSize,
+                            height: logoSize,
+                          ),
                         ),
                       ],
                     ),
-                  ),
-                  SizedBox(height: constraints.maxHeight * 0.05),
+                    ),
+                  SizedBox(height: constraints.maxHeight * 0.02),
                   Container(
                     width: constraints.maxWidth * 0.9,
                     constraints: BoxConstraints(
-                      maxWidth: 360,
+                      maxWidth: height,
                       minHeight: constraints.maxHeight * 0.6,
                     ),
                     decoration: BoxDecoration(
@@ -95,107 +84,142 @@ class _AccountChoosePageState extends State<AccountChoosePage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        SizedBox(height: 30),
+                        SizedBox(height: height * 0.03),
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          padding: EdgeInsets.symmetric(horizontal: contentPadding * 2),
                           child: Text(
                             'What kind of account are you signing in with?',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: Color(0xFF071D99),
-                              fontSize: 20,
+                              fontSize: fontSize * 1.8,
                               fontWeight: FontWeight.w900,
                             ),
                           ),
                         ),
-                        SizedBox(height: 60),
-                        _buildAccountButton(
+                        SizedBox(height: height * 0.05),
+                        _buildRadioOption(
                           'Student Account',
-                          () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ProfileElementsPage(),
-                              ),
-                            );
-                          },
+                          'student',
+                          fontSize * 1.5,
+                          contentPadding,
                         ),
-                        SizedBox(height: 20),
-                        _buildAccountButton(
+                        SizedBox(height: height * 0.02),
+                        _buildRadioOption(
                           'Organization Account',
-                          () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ProfileOrganization(),
-                              ),
-                            );
-                          },
+                          'organization',
+                          fontSize * 1.5,
+                          contentPadding,
                         ),
-                      ],
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      MouseRegion(
-                        cursor: SystemMouseCursors.click,
-                        onEnter: (_) => setState(() => isTermsHovered = true),
-                        onExit: (_) => setState(() => isTermsHovered = false),
-                        child: GestureDetector(
-                          onTap: () {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: Text('Back to Sign-in'),
-                                  content: Text('Are you sure you want to go back to sign-in page?'),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(context); // Close dialog
-                                        Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => SigninPage(),
-                                          ),
-                                        );
-                                      },
-                                      child: Text(
-                                        'Yes',
-                                        style: TextStyle(
-                                          color: Color(0xFF071D99),
-                                          fontWeight: FontWeight.bold,
+                        SizedBox(height: height * 0.05),
+                        SizedBox(
+                          width: buttonWidth,
+                          child: ElevatedButton(
+                            onPressed: selectedAccount == null
+                                ? null
+                                : () {
+                                    if (selectedAccount == 'student') {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => ProfileElementsPage(),
                                         ),
-                                      ),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(context); // Just close dialog
-                                      },
-                                      child: Text(
-                                        'No',
-                                        style: TextStyle(
-                                          color: Color(0xFF071D99),
+                                      );
+                                    } else {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => ProfileOrganization(),
                                         ),
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          },
-                          child: Text(
-                            'Back to Sign-in',
-                            style: TextStyle(
-                              color: isTermsHovered ? Color(0xFF0529CC) : Color(0xFF071D99),
-                              fontSize: 12,
-                              fontWeight: FontWeight.w800,
+                                      );
+                                    }
+                                  },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Color(0xFFD7A61F),
+                              foregroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              shadowColor: Colors.black,
+                              elevation: 5,
+                            ),
+                            child: Text(
+                              'Next',
+                              style: TextStyle(
+                                fontSize: fontSize * 1.2,
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'Jost',
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ]
+                        SizedBox(height: height * 0.08), // space after next button
+                        MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          onEnter: (event) => setState(() => isTermsHovered = true),
+                          onExit: (event) => setState(() => isTermsHovered = false),
+                          child: GestureDetector(
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text(
+                                      'Back to Sign-in',
+                                      style: TextStyle(fontSize: fontSize * 1.5),
+                                    ),
+                                    content: Text(
+                                      'Are you sure you want to go back to sign-in page?',
+                                      style: TextStyle(fontSize: fontSize * 1.2),
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                          Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => SigninPage(),
+                                            ),
+                                          );
+                                        },
+                                        child: Text(
+                                          'Yes',
+                                          style: TextStyle(
+                                            color: Color(0xFF071D99),
+                                            fontSize: fontSize * 1.2,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                      TextButton(
+                                        onPressed: () => Navigator.pop(context),
+                                        child: Text(
+                                          'No',
+                                          style: TextStyle(
+                                            color: Color(0xFF071D99),
+                                            fontSize: fontSize * 1.2,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
+                            child: Text(
+                              'Back to Sign-in',
+                              style: TextStyle(
+                                color: isTermsHovered ? Color(0xFF0529CC) : Color(0xFF071D99),
+                                fontSize: fontSize * 1.2,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: height * 0.03), // Add bottom spacing
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -206,29 +230,32 @@ class _AccountChoosePageState extends State<AccountChoosePage> {
     );
   }
 
-  Widget _buildAccountButton(String text, VoidCallback onPressed) {
-    return SizedBox(
-      width: 280,
-      height: 50,
-      child: ElevatedButton(
-        onPressed: onPressed,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Color(0xFFD7A61F),
-          foregroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-          shadowColor: Colors.black,
-          elevation: 5,
-        ),
-        child: Text(
+  Widget _buildRadioOption(
+    String text,
+    String value,
+    double fontSize,
+    double contentPadding,
+  ) {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(horizontal: contentPadding * 3),
+      child: RadioListTile<String>(
+        title: Text(
           text,
           style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            fontFamily: 'Jost',
+            fontSize: fontSize,
+            color: Color(0xFF071D99),
+            fontWeight: FontWeight.w500,
           ),
         ),
+        value: value,
+        groupValue: selectedAccount,
+        activeColor: Color(0xFFD7A61F),
+        onChanged: (String? value) {
+          setState(() {
+            selectedAccount = value;
+          });
+        },
       ),
     );
   }

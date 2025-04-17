@@ -34,7 +34,6 @@ class _EventFinderPageState extends State<EventFinderPage> {
   final TextEditingController _searchController = TextEditingController();
   String _selectedCategory = 'All';
 
-
 ////////picsum for temp pics ////////////////
   final List<Category> _categories = [
     Category(name: 'All', imageUrl: 'https://picsum.photos/100'),
@@ -73,9 +72,14 @@ class _EventFinderPageState extends State<EventFinderPage> {
 
   @override
   Widget build(BuildContext context) {
-    // Get screen dimensions
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
+    final screenSize = MediaQuery.of(context).size;
+    final width = screenSize.width;
+    final height = screenSize.height;
+
+    // Adjusted dimensions for better fit
+    final logoSize = width * 0.15; // Reduced from 0.45
+    final fontSize = width * 0.03;
+    final contentPadding = width * 0.02;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -83,19 +87,18 @@ class _EventFinderPageState extends State<EventFinderPage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              // Search and Filter Section
               Container(
                 padding: EdgeInsets.symmetric(
-                  horizontal: screenWidth * 0.04,
-                  vertical: screenHeight * 0.02,
+                  horizontal: contentPadding * 2,
+                  vertical: height * 0.04,
                 ),
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
-                      Color(0xFF071D99),  // Blue
-                      Color(0xFF2C3E91),  // Lighter blue
+                      Color(0xFF071D99),
+                      Color(0xFFD7A61F),
                     ],
                   ),
                 ),
@@ -105,15 +108,13 @@ class _EventFinderPageState extends State<EventFinderPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         SizedBox(
-                          width: screenWidth * 0.2,
+                          width: logoSize,
                           child: Image.asset(
                             'images/xavloglogo.png',
-                            height: screenHeight * 0.06,
+                            height: height * 0.08,
                             fit: BoxFit.contain,
-                            color: Colors.white,  // Make logo white
                           ),
                         ),
-                        // Profile Section
                         Expanded(
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.end,
@@ -121,30 +122,30 @@ class _EventFinderPageState extends State<EventFinderPage> {
                               Flexible(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: const [
+                                  children: [
                                     Text(
                                       'Hello, Francis',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 16,
-                                        color: Colors.white,  // Make text white
+                                        fontSize: fontSize * 1.2,
+                                        color: Colors.white,
                                       ),
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                     Text(
                                       '2-BSIT',
                                       style: TextStyle(
-                                        color: Colors.white70,  // Make text white with opacity
-                                        fontSize: 14,
+                                        color: Colors.white70,
+                                        fontSize: fontSize,
                                       ),
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                   ],
                                 ),
                               ),
-                              SizedBox(width: screenWidth * 0.03),
+                              SizedBox(width: width * 0.03),
                               CircleAvatar(
-                                radius: screenWidth * 0.06,
+                                radius: width * 0.04,
                                 backgroundImage: const NetworkImage('https://picsum.photos/100'),
                               ),
                             ],
@@ -152,23 +153,24 @@ class _EventFinderPageState extends State<EventFinderPage> {
                         ),
                       ],
                     ),
-                    SizedBox(height: screenHeight * 0.02),
-
-                    // Search TextField with white background
+                    SizedBox(height: height * 0.02),
+                    // Search TextField
                     TextField(
                       controller: _searchController,
+                      style: TextStyle(fontSize: fontSize),
                       decoration: InputDecoration(
                         hintText: 'Search events',
-                        prefixIcon: const Icon(Icons.search),
+                        hintStyle: TextStyle(fontSize: fontSize),
+                        prefixIcon: Icon(Icons.search, size: fontSize * 1.2),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(25),
-                          borderSide: BorderSide.none,  // Remove border
+                          borderSide: BorderSide.none,
                         ),
                         filled: true,
-                        fillColor: Colors.white,  // White background for search box
+                        fillColor: Colors.white,
                         contentPadding: EdgeInsets.symmetric(
-                          vertical: screenHeight * 0.015,
-                          horizontal: screenWidth * 0.04,
+                          vertical: height * 0.015,
+                          horizontal: width * 0.04,
                         ),
                       ),
                     ),
@@ -179,29 +181,29 @@ class _EventFinderPageState extends State<EventFinderPage> {
               // Categories Section
               Padding(
                 padding: EdgeInsets.symmetric(
-                  horizontal: screenWidth * 0.04,
-                  vertical: screenHeight * 0.01, // Reduced from 0.02
+                  horizontal: contentPadding * 2,
+                  vertical: height * 0.01,
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'Categories',
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: fontSize * 1.3,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF071D99),
+                        color: const Color(0xFF071D99),
                       ),
                     ),
-                    SizedBox(height: screenHeight * 0.01),
+                    SizedBox(height: height * 0.01),
                     SizedBox(
-                      height: screenHeight * 0.10, // Reduced from 0.12
+                      height: height * 0.10,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: _categories.length,
                         itemBuilder: (context, index) {
                           return Padding(
-                            padding: EdgeInsets.only(right: screenWidth * 0.03),
+                            padding: EdgeInsets.only(right: width * 0.03),
                             child: GestureDetector(
                               onTap: () {
                                 setState(() {
@@ -221,15 +223,15 @@ class _EventFinderPageState extends State<EventFinderPage> {
                                       ),
                                     ),
                                     child: CircleAvatar(
-                                      radius: screenWidth * 0.05,
+                                      radius: width * 0.05,
                                       backgroundImage: NetworkImage(_categories[index].imageUrl),
                                     ),
                                   ),
-                                  SizedBox(height: screenHeight * 0.01),
+                                  SizedBox(height: height * 0.01),
                                   Text(
                                     _categories[index].name,
                                     style: TextStyle(
-                                      fontSize: 12,
+                                      fontSize: fontSize,
                                       fontWeight: _selectedCategory == _categories[index].name
                                           ? FontWeight.bold
                                           : FontWeight.normal,
@@ -247,7 +249,7 @@ class _EventFinderPageState extends State<EventFinderPage> {
               ),
 
               // Just Announced Section starts immediately after
-              ..._buildEventSections(screenWidth, screenHeight),
+              ..._buildEventSections(width, height),
             ],
           ),
         ),
@@ -256,70 +258,79 @@ class _EventFinderPageState extends State<EventFinderPage> {
   }
 
   // Helper method to build event sections
-  List<Widget> _buildEventSections(double screenWidth, double screenHeight) {
+  List<Widget> _buildEventSections(double width, double height) {
+    final fontSize = width * 0.03;
     final filteredEvents = _getFilteredEvents();
     final sectionTitles = ['Just Announced', 'Your Events', 'Calendar Events'];
-    
+
     return sectionTitles.map((title) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
             padding: EdgeInsets.symmetric(
-              horizontal: screenWidth * 0.04,
-              vertical: screenHeight * 0.01,
+              horizontal: width * 0.04,
+              vertical: height * 0.01,
             ),
             child: Text(
               title,
-              style: const TextStyle(
-                fontSize: 18,
+              style: TextStyle(
+                fontSize: fontSize * 1.3,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF071D99),
+                color: const Color(0xFF071D99),
               ),
             ),
           ),
           SizedBox(
-            height: screenHeight * 0.25,
+            height: height * 0.25,
             child: filteredEvents.isEmpty
                 ? Center(
                     child: Text(
-                      'No events found for ${_selectedCategory}',
-                      style: const TextStyle(
+                      'No events found for $_selectedCategory',
+                      style: TextStyle(
                         color: Colors.grey,
-                        fontSize: 16,
+                        fontSize: fontSize * 1.2,
                       ),
                     ),
                   )
                 : ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
+                    padding: EdgeInsets.symmetric(horizontal: width * 0.04),
                     itemCount: filteredEvents.length,
                     itemBuilder: (context, index) => _buildEventCard(
-                      screenWidth,
-                      screenHeight,
+                      width,
+                      height,
                       index,
                       title,
                       filteredEvents[index],
                     ),
                   ),
           ),
-          SizedBox(height: screenHeight * 0.02),
+          SizedBox(height: height * 0.02),
         ],
       );
     }).toList();
   }
 
   Widget _buildEventCard(
-    double screenWidth,
-    double screenHeight,
+    double width,
+    double height,
     int index,
     String sectionTitle,
     Event event,
   ) {
+    final cardWidth = width * 0.45;
+    final cardHeight = height * 0.28;
+    final imageHeight = cardHeight * 0.45;
+    final contentPadding = width * 0.03;
+    final iconSize = width * 0.05;
+
     return Container(
-      width: screenWidth * 0.45,
-      margin: EdgeInsets.only(right: screenWidth * 0.04),
+      width: cardWidth,
+      height: cardHeight,
+      margin: EdgeInsets.only(right: width * 0.04),
       child: Card(
+        elevation: 2,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
@@ -332,61 +343,79 @@ class _EventFinderPageState extends State<EventFinderPage> {
                   borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
                   child: Image.network(
                     event.imageUrl,
-                    height: screenHeight * 0.12,
+                    height: imageHeight,
                     width: double.infinity,
                     fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        height: imageHeight,
+                        color: Colors.grey[200],
+                        child: Icon(
+                          Icons.image_not_supported,
+                          size: iconSize * 2,
+                          color: Colors.grey[400],
+                        ),
+                      );
+                    },
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.all(screenWidth * 0.02),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        event.title,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.all(contentPadding),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Text(
+                          event.title,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: width * 0.035,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      SizedBox(height: screenHeight * 0.01),
-                      Text(
-                        event.date.toString().split(' ')[0],
-                        style: TextStyle(
-                          color: Colors.grey[600],
-                          fontSize: 12,
+                        Text(
+                          event.date.toString().split(' ')[0],
+                          style: TextStyle(
+                            color: Colors.grey[600],
+                            fontSize: width * 0.03,
+                          ),
+                          overflow: TextOverflow.ellipsis,
                         ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      SizedBox(height: screenHeight * 0.01),
-                      Text(
-                        event.location,
-                        style: TextStyle(
-                          color: Colors.grey[600],
-                          fontSize: 12,
+                        Text(
+                          event.location,
+                          style: TextStyle(
+                            color: Colors.grey[600],
+                            fontSize: width * 0.03,
+                          ),
+                          overflow: TextOverflow.ellipsis,
                         ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ],
             ),
-            // Bookmark Button (replaced heart/favorite icon)
             Positioned(
-              top: screenHeight * 0.01,
-              right: screenWidth * 0.02,
+              top: contentPadding,
+              right: contentPadding,
               child: Container(
+                padding: EdgeInsets.all(contentPadding * 0.5),
                 decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(15),
+                  color: Colors.white.withOpacity(0.9),
+                  borderRadius: BorderRadius.circular(iconSize),
                 ),
                 child: IconButton(
-                  icon: const Icon(
-                    Icons.bookmark_border, // Changed to bookmark icon
-                    color: Color(0xFF071D99), // Changed to blue color to match theme
-                    size: 20,
+                  icon: Icon(
+                    Icons.bookmark_border,
+                    color: const Color(0xFF071D99),
+                    size: iconSize,
+                  ),
+                  padding: EdgeInsets.zero,
+                  constraints: BoxConstraints(
+                    minWidth: iconSize * 1.5,
+                    minHeight: iconSize * 1.5,
                   ),
                   onPressed: () {
                     // Add bookmark functionality
