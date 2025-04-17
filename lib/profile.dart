@@ -14,7 +14,7 @@ class _ProfilePageState extends State<ProfilePage> {
   final _formKey = GlobalKey<FormState>();
   bool _isEditing = false;
   String name = 'John Doe';
-  String description = 'Admin';
+  String description = 'Student';
   String contact = '+1 234 567 8900';
   String email = 'john.doe@example.com';
   String department = 'Computer Science';
@@ -22,6 +22,13 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+    final width = screenSize.width;
+    
+    // Responsive dimensions
+    final fontSize = width * 0.03;
+    final iconSize = width * 0.04;
+
     return Scaffold(
       backgroundColor: const Color(0xFF071D99), // Blue background
       appBar: AppBar(
@@ -60,18 +67,16 @@ class _ProfilePageState extends State<ProfilePage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const SizedBox(height: 20),
-
-                  // Profile Picture Section
                   CircleAvatar(
-                    radius: 50,
-                    backgroundColor: const Color(0xFFD7A61F), // Yellow
-                    child: const Icon(Icons.person, size: 50, color: Colors.white),
+                    radius: width * 0.08, // Responsive avatar size
+                    backgroundColor: const Color(0xFFD7A61F),
+                    child: Icon(Icons.person, size: iconSize, color: Colors.white),
                   ),
                   const SizedBox(height: 16),
                   Text(
                     name,
-                    style: const TextStyle(
-                      fontSize: 24,
+                    style: TextStyle(
+                      fontSize: fontSize * 1.2, // 24 -> fontSize * 1.5
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),
@@ -79,8 +84,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   const SizedBox(height: 4),
                   Text(
                     description,
-                    style: const TextStyle(
-                      fontSize: 14,
+                    style: TextStyle(
+                      fontSize: fontSize * 0.8, // 14 -> fontSize * 0.8
                       color: Colors.white70,
                     ),
                   ),
@@ -201,6 +206,7 @@ class _ProfilePageState extends State<ProfilePage> {
           children: [
             const Text(
               'Edit Profile',
+              textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -289,6 +295,10 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget _buildInfoCard(String title, List<Widget> children, {bool showEditIcon = false}) {
+    final screenSize = MediaQuery.of(context).size;
+    final width = screenSize.width;
+    final fontSize = width * 0.03;
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),
@@ -311,10 +321,10 @@ class _ProfilePageState extends State<ProfilePage> {
             children: [
               Text(
                 title,
-                style: const TextStyle(
-                  fontSize: 18,
+                style: TextStyle(
+                  fontSize: fontSize * 1.2, // 18 -> fontSize * 1.2
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF071D99),
+                  color: const Color(0xFF071D99),
                 ),
               ),
               if (showEditIcon)
@@ -324,7 +334,11 @@ class _ProfilePageState extends State<ProfilePage> {
                       _isEditing = true;
                     });
                   },
-                  child: const Icon(Icons.edit, color: Color(0xFF071D99)),
+                  child: Icon(
+                    Icons.edit, 
+                    color: const Color(0xFF071D99),
+                    size: fontSize * 1.2,
+                  ),
                 ),
             ],
           ),
@@ -336,17 +350,25 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget _buildInfoTile(IconData icon, String label, String value) {
+    final screenSize = MediaQuery.of(context).size;
+    final width = screenSize.width;
+    final fontSize = width * 0.03;
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
         children: [
           Container(
-            padding: const EdgeInsets.all(8),
+            padding: EdgeInsets.all(fontSize * 0.4),
             decoration: BoxDecoration(
               color: const Color(0xFF071D99).withOpacity(0.1),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Icon(icon, color: const Color(0xFF071D99), size: 20),
+            child: Icon(
+              icon, 
+              color: const Color(0xFF071D99), 
+              size: fontSize * 1.2,
+            ),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -355,16 +377,16 @@ class _ProfilePageState extends State<ProfilePage> {
               children: [
                 Text(
                   label,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: Colors.grey,
-                    fontSize: 14,
+                    fontSize: fontSize * 0.8,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   value,
-                  style: const TextStyle(
-                    fontSize: 16,
+                  style: TextStyle(
+                    fontSize: fontSize * 1.2, 
                     fontWeight: FontWeight.w500,
                     color: Colors.black,
                   ),
@@ -378,6 +400,10 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget _buildUtilityTile(IconData icon, String label, VoidCallback onTap) {
+    final screenSize = MediaQuery.of(context).size;
+    final width = screenSize.width;
+    final fontSize = width * 0.03;
+    
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: InkWell(
@@ -398,8 +424,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 const SizedBox(width: 16),
                 Text(
                   label,
-                  style: const TextStyle(
-                    fontSize: 16,
+                  style: TextStyle(
+                    fontSize: fontSize * 1.2,
                     fontWeight: FontWeight.w500,
                     color: Colors.black,
                   ),

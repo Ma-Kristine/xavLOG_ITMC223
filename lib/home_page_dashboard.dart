@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'profile.dart';
 import 'eventfinderpage.dart';
 import 'login_page.dart';
+import 'faqs.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -14,6 +15,17 @@ class _HomepageState extends State<Homepage> {
   String _name = 'Francis';
   String _description = '2 - BSIT';
   String _notifNumber = '3';
+
+  final _titleController = TextEditingController();
+  final _descriptionController = TextEditingController();
+  String _selectedCategory = 'Academic'; // Default category
+  DateTime _selectedDate = DateTime.now();
+
+  final List<String> _activityCategories = [
+    'Academic',
+    'Project',
+    'Organization',
+  ];
 
   final List<DashboardItem> navigationItems = [
     DashboardItem(
@@ -94,17 +106,159 @@ class _HomepageState extends State<Homepage> {
     });
   }
 
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate,
+      firstDate: DateTime.now(),
+      lastDate: DateTime.now().add(const Duration(days: 365)),
+      builder: (context, child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            primaryColor: const Color(0xFF071D99),
+            colorScheme: const ColorScheme.light(primary: Color(0xFF071D99)),
+            buttonTheme: const ButtonThemeData(textTheme: ButtonTextTheme.primary),
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (picked != null && picked != _selectedDate) {
+      setState(() {
+        _selectedDate = picked;
+      });
+    }
+  }
+
+  void _showAddActivityDialog() {
+    final screenSize = MediaQuery.of(context).size;
+    final width = screenSize.width;
+    final fontSize = width * 0.03;
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            'Add New Activity',
+            style: TextStyle(
+              fontSize: fontSize * 1.3,
+              fontWeight: FontWeight.bold,
+              color: const Color(0xFF071D99),
+            ),
+          ),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: _titleController,
+                  decoration: const InputDecoration(
+                    labelText: 'Title',
+                    hintText: 'Enter activity title',
+                  ),
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: _descriptionController,
+                  decoration: const InputDecoration(
+                    labelText: 'Description',
+                    hintText: 'Enter activity description',
+                  ),
+
+                ),
+                const SizedBox(height: 16),
+                DropdownButtonFormField<String>(
+                  value: _selectedCategory,
+                  decoration: const InputDecoration(
+                    labelText: 'Category',
+                  ),
+                  items: _activityCategories.map((String category) {
+                    return DropdownMenuItem(
+                      value: category,
+                      child: Text(category),
+                    );
+                  }).toList(),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      _selectedCategory = newValue!;
+                    });
+                  },
+                ),
+                const SizedBox(height: 16),
+                ListTile(
+                  title: const Text('Date'),
+                  subtitle: Text(
+                    '${_selectedDate.month}/${_selectedDate.day}/${_selectedDate.year}',
+                  ),
+                  trailing: const Icon(Icons.calendar_today),
+                  onTap: () => _selectDate(context),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                _titleController.clear();
+                _descriptionController.clear();
+                _selectedCategory = 'Academic';
+                _selectedDate = DateTime.now();
+              },
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF071D99),
+              ),
+              onPressed: () {
+                if (_titleController.text.isNotEmpty) {
+                  setState(() {
+                    activities.add(
+                      Activity(
+                        title: _titleController.text,
+                        description: _descriptionController.text,
+                        date: _selectedDate,
+                        category: _selectedCategory,
+                      ),
+                    );
+                    // Sort activities by date
+                    activities.sort((a, b) => a.date.compareTo(b.date));
+                  });
+                  Navigator.pop(context);
+                  _titleController.clear();
+                  _descriptionController.clear();
+                  _selectedCategory = 'Academic';
+                  _selectedDate = DateTime.now();
+                }
+              },
+              child: const Text(
+                'Add Activity',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Widget _buildAnalyticsSummary() {
+    final screenSize = MediaQuery.of(context).size;
+    final width = screenSize.width;
+    final fontSize = width * 0.03;
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Monthly Analytics',
             style: TextStyle(
-              fontSize: 20,
+              fontSize: fontSize * 1.2,
               fontWeight: FontWeight.bold,
               fontFamily: 'Jost',
               color: Color(0xFF071D99),
@@ -128,11 +282,11 @@ class _HomepageState extends State<Homepage> {
                     childAspectRatio: 1.5,
                     children: [
                       /////////////// chnage numbers according to computations of analytics //////////////
-                      _buildStatCard('Total Classes', '28', Icons.class_),
-                      _buildStatCard('Total Attendance', '85%', Icons.calendar_view_day),
-                      _buildStatCard('Classes', '24/28', Icons.class_),
-                      _buildStatCard('Performance', 'Good', Icons.trending_up),
-                      _buildStatCard('Status', 'On Track', Icons.check_circle),
+                      _buildStatCard('Total Classes', '28', Icons.class_, fontSize * 1.2),
+                      _buildStatCard('Total Attendance', '85%', Icons.calendar_view_day, fontSize * 1.2),
+                      _buildStatCard('Classes', '24/28', Icons.class_, fontSize * 1.2),
+                      _buildStatCard('Performance', 'Good', Icons.trending_up, fontSize * 1.2),
+                      _buildStatCard('Status', 'On Track', Icons.check_circle, fontSize * 1.2),
                     ],
                   ),
                   const Divider(),
@@ -154,7 +308,7 @@ class _HomepageState extends State<Homepage> {
     );
   }
 
-  Widget _buildStatCard(String title, String value, IconData icon) {
+  Widget _buildStatCard(String title, String value, IconData icon, double fontSize) {
     return Card(
       elevation: 2,
       color: Colors.white,
@@ -169,8 +323,8 @@ class _HomepageState extends State<Homepage> {
           const SizedBox(height: 8),
           Text(
             value,
-            style: const TextStyle(
-              fontSize: 18,
+            style: TextStyle(
+              fontSize: fontSize * 1.2,
               fontWeight: FontWeight.bold,
               fontFamily: 'Jost',
               color: Color(0xFF071D99),
@@ -178,8 +332,8 @@ class _HomepageState extends State<Homepage> {
           ),
           Text(
             title,
-            style: const TextStyle(
-              fontSize: 14, 
+            style: TextStyle(
+              fontSize: fontSize * 0.8,
               fontFamily: 'Inter',
               color: Colors.grey
             ),
@@ -190,6 +344,10 @@ class _HomepageState extends State<Homepage> {
   }
 
   Widget _buildUpcomingActivities() {
+    final screenSize = MediaQuery.of(context).size;
+    final width = screenSize.width;
+    final fontSize = width * 0.03;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
@@ -198,19 +356,17 @@ class _HomepageState extends State<Homepage> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
+            Text(
               'Upcoming Activities',
               style: TextStyle(
-                fontSize: 20,
+                fontSize: fontSize * 1.2,
                 fontWeight: FontWeight.bold,
                 fontFamily: 'Jost',
                 color: Color(0xFF071D99),
               ),
             ),
             GestureDetector(
-              onTap: () {
-                ////////////////////// Handle adding new activity /////////////////////
-              },
+              onTap: _showAddActivityDialog,
               child: Tooltip(
                 message: 'Add Activity',
                 child: CircleAvatar(
@@ -334,8 +490,6 @@ class _HomepageState extends State<Homepage> {
   }
 
   Drawer _buildMainMenuDrawer() {
-
-    
     return Drawer(
       child: Container(
         color: Colors.white,
@@ -363,7 +517,7 @@ class _HomepageState extends State<Homepage> {
                     _name,
                     style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 20,
+                      fontSize: 14,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'Jost',
                     ),
@@ -372,7 +526,7 @@ class _HomepageState extends State<Homepage> {
                     _description,
                     style: TextStyle(
                       color: Colors.white70,
-                      fontSize: 14,
+                      fontSize: 12,
                       fontFamily: 'Inter',
                     ),
                   ),
@@ -411,7 +565,11 @@ class _HomepageState extends State<Homepage> {
               title: const Text('Help & Support'),
               onTap: () {
                 ///////////////// Handle FAQs, open FAQs page ////////////////////////
-                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const FAQs()
+                  ),
+                );
               },
             ),
             ListTile(
@@ -463,6 +621,10 @@ class _HomepageState extends State<Homepage> {
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+    final width = screenSize.width;
+    final fontSize = width * 0.03;
+
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 255, 255), // Blue background
       drawer: _buildMainMenuDrawer(),
@@ -472,7 +634,7 @@ class _HomepageState extends State<Homepage> {
           children: [
             // Profile Section
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
+              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 32.0),
               margin: const EdgeInsets.symmetric(horizontal: 16.0),
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
@@ -514,8 +676,8 @@ class _HomepageState extends State<Homepage> {
                       children: [
                         Text(
                           'Hello, $_name', 
-                          style: const TextStyle(
-                            fontSize: 22,
+                          style: TextStyle(
+                            fontSize: fontSize * 1.4,
                             fontWeight: FontWeight.bold,
                             fontFamily: 'Jost',
                             color: Colors.white,
@@ -525,7 +687,7 @@ class _HomepageState extends State<Homepage> {
                         Text(
                           _description,
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: fontSize * 1.2,
                             fontFamily: 'Inter',
                             fontWeight: FontWeight.w500,
                             color: Colors.white70,
@@ -584,29 +746,6 @@ class _HomepageState extends State<Homepage> {
 
             const SizedBox(height: 20),
 
-            // Search Bar
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: 'Search...',
-                  hintStyle: const TextStyle(color: Color.fromARGB(179, 43, 75, 203)),
-                  prefixIcon: const Icon(Icons.search, color: Color.fromARGB(179, 43, 75, 203)),
-                  filled: true,
-                  fillColor: const Color.fromARGB(255, 255, 255, 255), // Dark blue
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                    borderSide: BorderSide(
-                      color: const Color.fromARGB(255, 17, 38, 179),
-                    ),
-                  ),
-                  contentPadding: const EdgeInsets.symmetric(vertical: 12),
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
             // Analytics Summary
             _buildAnalyticsSummary(),
 
@@ -618,10 +757,10 @@ class _HomepageState extends State<Homepage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     'Where Do You Want To Go?',
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: fontSize * 1.2,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'Jost',
                       color: Color(0xFF071D99),
@@ -660,8 +799,8 @@ class _HomepageState extends State<Homepage> {
                                   const SizedBox(height: 12),
                                   Text(
                                     item.title,
-                                    style: const TextStyle(
-                                      fontSize: 14,
+                                    style: TextStyle(
+                                      fontSize: fontSize * 1,
                                       fontWeight: FontWeight.bold,
                                       fontFamily: 'Inter',
                                       color: Colors.white,
@@ -688,10 +827,10 @@ class _HomepageState extends State<Homepage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     'Your Calendar',
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: fontSize * 1.2,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'Jost',
                       color: Color(0xFF071D99),
@@ -745,6 +884,13 @@ class _HomepageState extends State<Homepage> {
       default:
         return const SizedBox(); // Return an empty widget as fallback
     }
+  }
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
   }
 }
 
