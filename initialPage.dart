@@ -218,7 +218,11 @@ class _AddSubjectScreenState extends State<AddSubjectScreen> {
                                         onTap: () {
                                           Navigator.push(
                                             context,
-                                            MaterialPageRoute(builder: (context) => SubjectPartitioningScreen(subjectName: subject)),
+                                            MaterialPageRoute(builder: (context) => SubjectPartitioningScreen(
+                                              subjectName: subject,
+                                              addedPartitions: [],
+                                              ),
+                                            ),
                                           );
                                         },
                                       child: 
@@ -396,4 +400,6 @@ Widget buildInputField(String hintText, {bool isLarge = false, required TextEdit
   );
 }
 
-// next sprint: delete feature and computation
+// next sprint features: 
+// delete
+// and computation
