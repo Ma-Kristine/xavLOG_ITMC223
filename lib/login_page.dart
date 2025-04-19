@@ -31,18 +31,11 @@ class _LoginPageState extends State<LoginPage> {
         width: width,
         height: height,
         decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFF132BB2),
-              Color(0xFFD7A61F),
-            ],
-          ),
+          color: Color(0xFF132BB2),
         ),
         child: Column(
           children: [
-            SizedBox(height: height * 0.02),
+            SizedBox(height: height * 0.03),
             Image.asset(
               'images/fulllogo.png',
               width: logoSize,
@@ -65,7 +58,7 @@ class _LoginPageState extends State<LoginPage> {
                       Text(
                         'Log-in',
                         style: TextStyle(
-                          color: const Color(0xFF071D99),
+                          color: const Color.fromARGB(255, 16, 16, 16),
                           fontSize: fontSize * 2,
                           fontWeight: FontWeight.w900,
                         ),
@@ -140,11 +133,11 @@ class _LoginPageState extends State<LoginPage> {
                               gradient: LinearGradient(
                                 colors: [
                                   isLoginHovered
-                                      ? const Color(0xFF3352DF)
-                                      : const Color(0xFF071D99),
+                                      ? const Color.fromARGB(255, 244, 202, 86)
+                                      : const Color(0xFFBFA547),
                                   isLoginHovered
-                                      ? const Color(0xFF3352DF)
-                                      : const Color(0xFF071D99),
+                                      ? const Color.fromARGB(255, 244, 202, 86)
+                                      : const Color(0xFFBFA547),
                                 ],
                               ),
                             ),
@@ -192,8 +185,8 @@ class _LoginPageState extends State<LoginPage> {
                                 'Create now',
                                 style: TextStyle(
                                   color: isTermsHovered 
-                                      ? const Color(0xFF0529CC) 
-                                      : const Color(0xFF071D99),
+                                      ? const Color(0xFFD7A61F)
+                                      : const Color.fromARGB(255, 16, 16, 16),
                                   fontSize: fontSize,
                                   fontWeight: FontWeight.w800,
                                 ),

@@ -24,42 +24,56 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
     final width = screenSize.width;
-    
+
     // Responsive dimensions
     final fontSize = width * 0.03;
     final iconSize = width * 0.04;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF071D99), // Blue background
+      backgroundColor: Colors.white, // Set background to white
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: const Color(0xFF071D99),
+        backgroundColor: const Color(0xFF071D99), // Blue AppBar
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: const Padding(
+            padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
+            child: Icon(Icons.arrow_back, color: Colors.white),
+          ),
           onPressed: () {
-            // If in editing mode, return to profile view
             if (_isEditing) {
               setState(() {
                 _isEditing = false;
               });
             } else {
-              // Otherwise, go back to previous screen
               Navigator.pop(context);
             }
           },
         ),
-        actions: [
-          Builder(
-            builder: (context) => IconButton(
-              icon: const Icon(Icons.settings, color: Colors.white),
-              onPressed: () {
-                Scaffold.of(context).openEndDrawer(); // Open the settings sidebar
-              },
-            ),
-          ),
-        ],
+        title: _isEditing
+            ? const Text(
+                'Edit Profile',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Jost',
+                  color: Colors.white,
+                ),
+              )
+            : null,
+        actions: _isEditing
+            ? null // Remove settings icon when in edit mode
+            : [
+                Builder(
+                  builder: (context) => IconButton(
+                    icon: const Icon(Icons.settings, color: Colors.white),
+                    onPressed: () {
+                      Scaffold.of(context).openEndDrawer(); // Open the settings sidebar
+                    },
+                  ),
+                ),
+              ],
       ),
-      endDrawer: _buildSettingsSidebar(), // Add the settings sidebar
+      endDrawer: _isEditing ? null : _buildSettingsSidebar(), // Remove sidebar when editing
       body: SingleChildScrollView(
         child: _isEditing
             ? _buildEditForm()
@@ -68,25 +82,27 @@ class _ProfilePageState extends State<ProfilePage> {
                 children: [
                   const SizedBox(height: 20),
                   CircleAvatar(
-                    radius: width * 0.08, // Responsive avatar size
-                    backgroundColor: const Color(0xFFD7A61F),
-                    child: Icon(Icons.person, size: iconSize, color: Colors.white),
+                    radius: width * 0.10, // Responsive avatar size
+                    backgroundColor: const Color.fromARGB(255, 146, 146, 146),
+                    child: Icon(Icons.person, size: iconSize * 2, color: Colors.white),
                   ),
                   const SizedBox(height: 16),
                   Text(
                     name,
                     style: TextStyle(
-                      fontSize: fontSize * 1.2, // 24 -> fontSize * 1.5
+                      fontSize: fontSize * 1.8,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                      fontFamily: 'Jost', // Updated font
+                      color: const Color(0xFF071D99), // Blue text
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     description,
                     style: TextStyle(
-                      fontSize: fontSize * 0.8, // 14 -> fontSize * 0.8
-                      color: Colors.white70,
+                      fontSize: fontSize * 1.2,
+                      fontFamily: 'Jost', // Updated font
+                      color: Colors.grey,
                     ),
                   ),
                   const SizedBox(height: 20),
@@ -114,7 +130,6 @@ class _ProfilePageState extends State<ProfilePage> {
                     child: _buildInfoCard(
                       'Utilities',
                       [
-                    
                         _buildUtilityTile(Icons.rule, 'Terms and Conditions', () {
                           Navigator.push(
                             context,
@@ -204,15 +219,6 @@ class _ProfilePageState extends State<ProfilePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Edit Profile',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
             const SizedBox(height: 20),
 
             // Name Field
@@ -239,7 +245,7 @@ class _ProfilePageState extends State<ProfilePage> {
             Center(
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFD7A61F), // Yellow
+                  backgroundColor: const Color(0xFF071D99), // Blue button
                   padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
@@ -250,7 +256,10 @@ class _ProfilePageState extends State<ProfilePage> {
                 },
                 child: const Text(
                   'Save Changes',
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'Jost', // Updated font
+                  ),
                 ),
               ),
             ),
@@ -267,19 +276,19 @@ class _ProfilePageState extends State<ProfilePage> {
         controller: controller,
         decoration: InputDecoration(
           labelText: label,
-          labelStyle: const TextStyle(color: Colors.white70),
+          labelStyle: const TextStyle(color: Colors.grey, fontFamily: 'Jost'), // Updated font
           filled: true,
-          fillColor: const Color(0xFF203A43), // Dark blue
+          fillColor: const Color(0xFFF5F5F5), // Light gray background
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide.none,
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-            borderSide: const BorderSide(color: Color(0xFFD7A61F)), // Yellow border
+            borderSide: const BorderSide(color: Color(0xFF071D99)), // Blue border
           ),
         ),
-        style: const TextStyle(color: Colors.white),
+        style: const TextStyle(color: Colors.black, fontFamily: 'Jost'), // Updated font
         onChanged: onChanged,
       ),
     );

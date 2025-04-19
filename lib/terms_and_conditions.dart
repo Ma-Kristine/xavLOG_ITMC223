@@ -5,37 +5,42 @@ class TermsAndConditions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final screenSize = MediaQuery.of(context).size;
     final width = screenSize.width;
 
     // Adjusted dimensions for better fit
-    final logoSize = width * 0.45; 
-    final fontSize = width * 0.03; 
+    final logoSize = width * 0.45;
+    final fontSize = width * 0.03;
 
     return Scaffold(
+      backgroundColor: Colors.white, // Set background to white
       appBar: AppBar(
+        toolbarHeight: 70, // Increase toolbar height to lower the content
         flexibleSpace: Container(
           decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Color(0xFF132BB2), Color(0xFFD7A61F)],
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
+            color: Colors.white, // White AppBar background
+          ),
+        ),
+        title: Padding(
+          padding: const EdgeInsets.only(top: 10.0), // Add padding to lower the title
+          child: Text(
+            'Terms And Conditions',
+            style: TextStyle(
+              fontFamily: 'Jost', // Updated font
+              color: const Color.fromARGB(255, 16, 16, 16),
+              fontWeight: FontWeight.bold,
+              fontSize: fontSize * 1.5, // Adjusted font size for better readability
             ),
           ),
         ),
-        title: Text(
-          'Terms And Conditions',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: fontSize * 1.5, // Adjusted font size for better readability
+        leading: Padding(
+          padding: const EdgeInsets.only(top: 10.0), // Add padding to lower the back button
+          child: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Color.fromARGB(255, 16, 16, 16)),
+            onPressed: () => Navigator.pop(context),
           ),
         ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
+        elevation: 0, // Remove shadow for a cleaner look
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),
@@ -46,7 +51,7 @@ class TermsAndConditions extends StatelessWidget {
               child: Image.asset(
                 'images/fulllogo.png',
                 width: logoSize * 1.5, // Adjusted logo size for better fit
-                height: logoSize * 1.5, 
+                height: logoSize * 1.5,
               ),
             ),
             Text(
@@ -55,7 +60,7 @@ class TermsAndConditions extends StatelessWidget {
               style: const TextStyle(
                 fontSize: 16,
                 color: Color.fromARGB(255, 0, 0, 0),
-                fontFamily: 'Jost',
+                fontFamily: 'Jost', // Updated font
               ),
             ),
             const SizedBox(height: 20),
@@ -121,6 +126,7 @@ class TermsAndConditions extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Blue header with gradient
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(16.0),
@@ -138,18 +144,22 @@ class TermsAndConditions extends StatelessWidget {
             child: Text(
               title,
               style: const TextStyle(
+                fontFamily: 'Jost', // Updated font
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),
             ),
           ),
-          Padding(
+          // White background for the section content
+          Container(
+            color: Colors.white, // Set background to white
             padding: const EdgeInsets.all(16.0),
             child: content is String
                 ? Text(
                     content,
                     style: const TextStyle(
+                      fontFamily: 'Jost', // Updated font
                       fontSize: 16,
                       color: Colors.black87,
                       height: 1.5,
@@ -163,6 +173,7 @@ class TermsAndConditions extends StatelessWidget {
                         child: Text(
                           item,
                           style: const TextStyle(
+                            fontFamily: 'Jost', // Updated font
                             fontSize: 14,
                             color: Colors.black87,
                             height: 1.5,

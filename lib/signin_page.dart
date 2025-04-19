@@ -35,18 +35,11 @@ class _SigninPageState extends State<SigninPage> {
         width: width,
         height: height,
         decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFF132BB2),
-              Color(0xFFD7A61F),
-            ],
-          ),
+          color: Color(0xFF132BB2),
         ),
         child: Column(
           children: [
-            SizedBox(height: height * 0.02),
+            SizedBox(height: height * 0.03),
             Image.asset(
               'images/fulllogo.png',
               width: logoSize,
@@ -69,7 +62,8 @@ class _SigninPageState extends State<SigninPage> {
                       Text(
                         'Sign-in',
                         style: TextStyle(
-                          color: const Color(0xFF071D99),
+                          color: const Color.fromARGB(255, 16, 16, 16),
+                          fontFamily: 'Jost',
                           fontSize: fontSize * 2,
                           fontWeight: FontWeight.w900,
                         ),
@@ -78,10 +72,16 @@ class _SigninPageState extends State<SigninPage> {
                       SizedBox(
                         width: buttonWidth * 2,
                         child: TextField(
-                          style: TextStyle(fontSize: fontSize * 1.2),
+                          style: TextStyle(
+                            fontSize: fontSize * 1.2,
+                            fontFamily: 'Jost',
+                          ),
                           decoration: InputDecoration(
                             labelText: 'Email Address',
-                            labelStyle: TextStyle(fontSize: fontSize * 1.2),
+                            labelStyle: TextStyle(
+                              fontSize: fontSize * 1.2,
+                              fontFamily: 'Jost',
+                            ),
                             suffixIcon: Icon(
                               Icons.email,
                               size: fontSize * 1.4,
@@ -93,11 +93,17 @@ class _SigninPageState extends State<SigninPage> {
                       SizedBox(
                         width: buttonWidth * 2,
                         child: TextField(
-                          style: TextStyle(fontSize: fontSize * 1.2),
+                          style: TextStyle(
+                            fontSize: fontSize * 1.2,
+                            fontFamily: 'Jost',
+                          ),
                           obscureText: !isPasswordVisible,
                           decoration: InputDecoration(
                             labelText: 'Password',
-                            labelStyle: TextStyle(fontSize: fontSize * 1.2),
+                            labelStyle: TextStyle(
+                              fontSize: fontSize * 1.2,
+                              fontFamily: 'Jost',
+                            ),
                             suffixIcon: MouseRegion(
                               cursor: SystemMouseCursors.click,
                               child: GestureDetector(
@@ -138,11 +144,11 @@ class _SigninPageState extends State<SigninPage> {
                               gradient: LinearGradient(
                                 colors: [
                                   isSignInHovered
-                                      ? const Color(0xFF3352DF)
-                                      : const Color(0xFF071D99),
+                                      ? const Color.fromARGB(255, 244, 202, 86)
+                                      : const Color(0xFFBFA547),
                                   isSignInHovered
-                                      ? const Color(0xFF3352DF)
-                                      : const Color(0xFF071D99),
+                                      ? const Color.fromARGB(255, 244, 202, 86)
+                                      : const Color(0xFFBFA547),
                                 ],
                               ),
                             ),
@@ -151,7 +157,8 @@ class _SigninPageState extends State<SigninPage> {
                               style: TextStyle(
                                 color: const Color(0xFFFFFFFF),
                                 fontSize: fontSize * 1.2,
-                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Jost',
+                                fontWeight: FontWeight.w800,
                               ),
                             ),
                           ),
@@ -164,6 +171,7 @@ class _SigninPageState extends State<SigninPage> {
                         style: TextStyle(
                           color: Colors.grey,
                           fontSize: fontSize,
+                          fontFamily: 'Jost',
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -189,8 +197,9 @@ class _SigninPageState extends State<SigninPage> {
                               style: TextStyle(
                                 color: isLoginHovered
                                     ? const Color(0xFFD7A61F)
-                                    : const Color(0xFF071D99),
+                                    : const Color.fromARGB(255, 16, 16, 16),
                                 fontSize: fontSize * 1.2,
+                                fontFamily: 'Jost',
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -220,8 +229,9 @@ class _SigninPageState extends State<SigninPage> {
                                 style: TextStyle(
                                   color: isTermsHovered
                                       ? const Color(0xFF0529CC)
-                                      : const Color(0xFF071D99),
+                                      : const Color.fromARGB(255, 16, 16, 16),
                                   fontSize: fontSize,
+                                  fontFamily: 'Jost',
                                   fontWeight: FontWeight.w800,
                                 ),
                               ),
@@ -253,8 +263,9 @@ class _SigninPageState extends State<SigninPage> {
                                 style: TextStyle(
                                   color: isFAQsHovered
                                       ? const Color(0xFF0529CC)
-                                      : const Color(0xFF071D99),
+                                      : const Color.fromARGB(255, 16, 16, 16),
                                   fontSize: fontSize,
+                                  fontFamily: 'Jost',
                                   fontWeight: FontWeight.w800,
                                 ),
                               ),

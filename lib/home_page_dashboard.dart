@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:table_calendar/table_calendar.dart';
 import 'profile.dart';
 import 'eventfinderpage.dart';
 import 'login_page.dart';
@@ -21,6 +22,10 @@ class _HomepageState extends State<Homepage> {
   String _selectedCategory = 'Academic'; // Default category
   DateTime _selectedDate = DateTime.now();
 
+  CalendarFormat _calendarFormat = CalendarFormat.month;
+  DateTime _focusedDay = DateTime.now();
+  DateTime? _selectedDay;
+
   final List<String> _activityCategories = [
     'Academic',
     'Project',
@@ -31,39 +36,22 @@ class _HomepageState extends State<Homepage> {
     DashboardItem(
       title: 'Attendance Tracker',
       icon: Icons.track_changes,
-      type: 'page'
+      type: 'page',
     ),
-    DashboardItem(
-      title: 'Calendar',
-      icon: Icons.calendar_today,
-      type: 'page'
-    ),
-    DashboardItem(
-      title: 'Event Finder',
-      icon: Icons.event,
-      type: 'page'
-    ),
-    DashboardItem(
-      title: 'Marketplace',
-      icon: Icons.store,
-      type: 'page'
-    ),
-    DashboardItem(
-      title: 'Grades Tracker',
-      icon: Icons.grade,
-      type: 'page'
-    ),
+    DashboardItem(title: 'Calendar', icon: Icons.calendar_today, type: 'page'),
+    DashboardItem(title: 'Event Finder', icon: Icons.event, type: 'page'),
+    DashboardItem(title: 'Marketplace', icon: Icons.store, type: 'page'),
+    DashboardItem(title: 'Grades Tracker', icon: Icons.grade, type: 'page'),
     DashboardItem(
       title: 'Social Collaboration',
       icon: Icons.group,
-      type: 'page'
+      type: 'page',
     ),
     DashboardItem(
       title: 'Schedule Manager',
       icon: Icons.schedule,
-      type: 'page'
+      type: 'page',
     ),
-    
   ];
 
   final List<Activity> activities = [
@@ -117,7 +105,9 @@ class _HomepageState extends State<Homepage> {
           data: ThemeData.light().copyWith(
             primaryColor: const Color(0xFF071D99),
             colorScheme: const ColorScheme.light(primary: Color(0xFF071D99)),
-            buttonTheme: const ButtonThemeData(textTheme: ButtonTextTheme.primary),
+            buttonTheme: const ButtonThemeData(
+              textTheme: ButtonTextTheme.primary,
+            ),
           ),
           child: child!,
         );
@@ -165,20 +155,18 @@ class _HomepageState extends State<Homepage> {
                     labelText: 'Description',
                     hintText: 'Enter activity description',
                   ),
-
                 ),
                 const SizedBox(height: 16),
                 DropdownButtonFormField<String>(
                   value: _selectedCategory,
-                  decoration: const InputDecoration(
-                    labelText: 'Category',
-                  ),
-                  items: _activityCategories.map((String category) {
-                    return DropdownMenuItem(
-                      value: category,
-                      child: Text(category),
-                    );
-                  }).toList(),
+                  decoration: const InputDecoration(labelText: 'Category'),
+                  items:
+                      _activityCategories.map((String category) {
+                        return DropdownMenuItem(
+                          value: category,
+                          child: Text(category),
+                        );
+                      }).toList(),
                   onChanged: (String? newValue) {
                     setState(() {
                       _selectedCategory = newValue!;
@@ -282,16 +270,44 @@ class _HomepageState extends State<Homepage> {
                     childAspectRatio: 1.5,
                     children: [
                       /////////////// chnage numbers according to computations of analytics //////////////
-                      _buildStatCard('Total Classes', '28', Icons.class_, fontSize * 1.2),
-                      _buildStatCard('Total Attendance', '85%', Icons.calendar_view_day, fontSize * 1.2),
-                      _buildStatCard('Classes', '24/28', Icons.class_, fontSize * 1.2),
-                      _buildStatCard('Performance', 'Good', Icons.trending_up, fontSize * 1.2),
-                      _buildStatCard('Status', 'On Track', Icons.check_circle, fontSize * 1.2),
+                      _buildStatCard(
+                        'Total Classes',
+                        '28',
+                        Icons.class_,
+                        fontSize * 1.2,
+                      ),
+                      _buildStatCard(
+                        'Total Attendance',
+                        '85%',
+                        Icons.calendar_view_day,
+                        fontSize * 1.2,
+                      ),
+                      _buildStatCard(
+                        'Classes',
+                        '24/28',
+                        Icons.class_,
+                        fontSize * 1.2,
+                      ),
+                      _buildStatCard(
+                        'Performance',
+                        'Good',
+                        Icons.trending_up,
+                        fontSize * 1.2,
+                      ),
+                      _buildStatCard(
+                        'Status',
+                        'On Track',
+                        Icons.check_circle,
+                        fontSize * 1.2,
+                      ),
                     ],
                   ),
                   const Divider(),
                   ListTile(
-                    leading: const Icon(Icons.analytics, color: Color(0xFF071D99)),
+                    leading: const Icon(
+                      Icons.analytics,
+                      color: Color(0xFF071D99),
+                    ),
                     title: const Text('View Full Analytics'),
                     trailing: const Icon(Icons.arrow_forward_ios),
                     onTap: () {
@@ -308,14 +324,17 @@ class _HomepageState extends State<Homepage> {
     );
   }
 
-  Widget _buildStatCard(String title, String value, IconData icon, double fontSize) {
+  Widget _buildStatCard(
+    String title,
+    String value,
+    IconData icon,
+    double fontSize,
+  ) {
     return Card(
       elevation: 2,
       color: Colors.white,
       shadowColor: Colors.grey.withOpacity(0.3),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -335,7 +354,7 @@ class _HomepageState extends State<Homepage> {
             style: TextStyle(
               fontSize: fontSize * 0.8,
               fontFamily: 'Inter',
-              color: Colors.grey
+              color: Colors.grey,
             ),
           ),
         ],
@@ -353,31 +372,31 @@ class _HomepageState extends State<Homepage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              'Upcoming Activities',
-              style: TextStyle(
-                fontSize: fontSize * 1.2,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'Jost',
-                color: Color(0xFF071D99),
-              ),
-            ),
-            GestureDetector(
-              onTap: _showAddActivityDialog,
-              child: Tooltip(
-                message: 'Add Activity',
-                child: CircleAvatar(
-                  backgroundColor: const Color(0xFFD7A61F),
-                  child: const Icon(Icons.add, color: Colors.white),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Upcoming Activities',
+                style: TextStyle(
+                  fontSize: fontSize * 1.2,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Jost',
+                  color: Color(0xFF071D99),
                 ),
               ),
-            ),
-          ],
-        ),
-          
+              GestureDetector(
+                onTap: _showAddActivityDialog,
+                child: Tooltip(
+                  message: 'Add Activity',
+                  child: CircleAvatar(
+                    backgroundColor: const Color(0xFFD7A61F),
+                    child: const Icon(Icons.add, color: Colors.white),
+                  ),
+                ),
+              ),
+            ],
+          ),
+
           const SizedBox(height: 16),
           ListView.builder(
             physics: const NeverScrollableScrollPhysics(),
@@ -412,9 +431,7 @@ class _HomepageState extends State<Homepage> {
                   ),
                   subtitle: Text(
                     _formatDate(activity.date),
-                    style: TextStyle(
-                      color: Colors.grey[600],
-                    ),
+                    style: TextStyle(color: Colors.grey[600]),
                   ),
                   children: [
                     Padding(
@@ -424,9 +441,10 @@ class _HomepageState extends State<Homepage> {
                         children: [
                           Row(
                             children: [
-                              const Icon(Icons.category, 
-                                size: 20, 
-                                color: Color(0xFF071D99)
+                              const Icon(
+                                Icons.category,
+                                size: 20,
+                                color: Color(0xFF071D99),
                               ),
                               const SizedBox(width: 8),
                               Text(
@@ -440,17 +458,16 @@ class _HomepageState extends State<Homepage> {
                           const SizedBox(height: 8),
                           Row(
                             children: [
-                              const Icon(Icons.description, 
-                                size: 20, 
-                                color: Color(0xFF071D99)
+                              const Icon(
+                                Icons.description,
+                                size: 20,
+                                color: Color(0xFF071D99),
                               ),
                               const SizedBox(width: 8),
                               Expanded(
                                 child: Text(
                                   activity.description,
-                                  style: TextStyle(
-                                    color: Colors.grey[800],
-                                  ),
+                                  style: TextStyle(color: Colors.grey[800]),
                                 ),
                               ),
                             ],
@@ -486,7 +503,7 @@ class _HomepageState extends State<Homepage> {
   }
 
   void _showMainMenu(BuildContext context) {
-    Scaffold.of(context).openDrawer();
+    Scaffold.of(context).openEndDrawer(); // Use openEndDrawer to open the drawer from the right
   }
 
   Drawer _buildMainMenuDrawer() {
@@ -496,45 +513,43 @@ class _HomepageState extends State<Homepage> {
         child: Column(
           children: [
             DrawerHeader(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Color(0xFF071D99), Color(0xFFD7A61F)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  const CircleAvatar(
-                    radius: 30,
-                    backgroundColor: Color(0xFFD7A61F),
-                    child: Icon(Icons.person, size: 40, color: Colors.white),
-                  ),
+                    Center(
+                    child: const CircleAvatar(
+                      radius: 30,
+                      backgroundColor: Color(0xFFD7A61F),
+                      child: Icon(Icons.person, size: 40, color: Colors.white),
+                    ),
+                    ),
+
                   const SizedBox(height: 8),
-                  Text(
-                    _name,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Jost',
+                  Center(
+                    child: Text(
+                      _name,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Jost',
+                      ),
                     ),
                   ),
-                  Text(
-                    _description,
-                    style: TextStyle(
-                      color: Colors.white70,
-                      fontSize: 12,
-                      fontFamily: 'Inter',
+                  Center(
+                    child: Text(
+                      _description,
+                      style: TextStyle(fontSize: 12, fontFamily: 'Inter'),
                     ),
                   ),
                 ],
               ),
             ),
             ListTile(
-              leading: const Icon(Icons.notifications, color: Color(0xFF071D99)),
+              leading: const Icon(
+                Icons.notifications,
+                color: Color(0xFF071D99),
+              ),
               title: const Text('Notifications'),
               trailing: Container(
                 padding: const EdgeInsets.all(4),
@@ -567,8 +582,7 @@ class _HomepageState extends State<Homepage> {
                 ///////////////// Handle FAQs, open FAQs page ////////////////////////
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const FAQs()
-                  ),
+                  MaterialPageRoute(builder: (context) => const FAQs()),
                 );
               },
             ),
@@ -585,7 +599,8 @@ class _HomepageState extends State<Homepage> {
               leading: const Icon(Icons.logout, color: Color(0xFF071D99)),
               title: const Text('Logout'),
               onTap: () {
-                showDialog( //logout dialog
+                showDialog(
+                  //logout dialog
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
@@ -601,8 +616,11 @@ class _HomepageState extends State<Homepage> {
                             // Handle logout
                             Navigator.pop(context); // Close dialog
                             Navigator.pop(context); // Close drawer
-                            Navigator.push(context, 
-                              MaterialPageRoute(builder: (context) => const LoginPage())
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const LoginPage(),
+                              ),
                             ); // Redirect to login page
                           },
                           child: const Text('Logout'),
@@ -619,6 +637,197 @@ class _HomepageState extends State<Homepage> {
     );
   }
 
+  List<Activity> _getEventsForDay(DateTime day) {
+    return activities
+        .where(
+          (activity) =>
+              activity.date.year == day.year &&
+              activity.date.month == day.month &&
+              activity.date.day == day.day,
+        )
+        .toList();
+  }
+
+  void _showEventsBottomSheet(DateTime selectedDay) {
+    final screenSize = MediaQuery.of(context).size;
+    final fontSize = screenSize.width * 0.03;
+    final events = _getEventsForDay(selectedDay);
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder:
+          (context) => Container(
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Events on ${selectedDay.month}/${selectedDay.day}/${selectedDay.year}',
+                        style: TextStyle(
+                          fontSize: fontSize * 1.2,
+                          fontWeight: FontWeight.bold,
+                          color: const Color(0xFF071D99),
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.close),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                    ],
+                  ),
+                ),
+                const Divider(height: 1),
+                events.isEmpty
+                    ? Padding(
+                      padding: const EdgeInsets.all(32.0),
+                      child: Text(
+                        'No events for this day',
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: fontSize,
+                        ),
+                      ),
+                    )
+                    : Flexible(
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        itemCount: events.length,
+                        itemBuilder: (context, index) {
+                          final event = events[index];
+                          return Card(
+                            margin: const EdgeInsets.only(bottom: 8),
+                            child: ListTile(
+                              leading: Container(
+                                padding: const EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  color: const Color(
+                                    0xFF071D99,
+                                  ).withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Icon(
+                                  _getCategoryIcon(event.category),
+                                  color: const Color(0xFF071D99),
+                                ),
+                              ),
+                              title: Text(
+                                event.title,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF071D99),
+                                ),
+                              ),
+                              subtitle: Text(event.description),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                SizedBox(height: MediaQuery.of(context).padding.bottom + 8),
+              ],
+            ),
+          ),
+    );
+  }
+
+  Widget _buildCalendarSection() {
+    final screenSize = MediaQuery.of(context).size;
+    final fontSize = screenSize.width * 0.03;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Your Calendar',
+            style: TextStyle(
+              fontSize: fontSize * 1.2,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Jost',
+              color: const Color(0xFF071D99),
+            ),
+          ),
+          const SizedBox(height: 16),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: const Color(0xFFD7A61F)),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 4,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Column(
+              children: [
+                TableCalendar(
+                  firstDay: DateTime.now().subtract(const Duration(days: 365)),
+                  lastDay: DateTime.now().add(const Duration(days: 365)),
+                  focusedDay: _focusedDay,
+                  calendarFormat: _calendarFormat,
+                  selectedDayPredicate: (day) {
+                    return isSameDay(_selectedDay, day);
+                  },
+                  onDaySelected: (selectedDay, focusedDay) {
+                    setState(() {
+                      _selectedDay = selectedDay;
+                      _focusedDay = focusedDay;
+                    });
+                    _showEventsBottomSheet(selectedDay);
+                  },
+                  onFormatChanged: (format) {
+                    setState(() {
+                      _calendarFormat = format;
+                    });
+                  },
+                  eventLoader: _getEventsForDay,
+                  calendarStyle: const CalendarStyle(
+                    markersMaxCount: 3,
+                    markerDecoration: BoxDecoration(
+                      color: Color(0xFF071D99),
+                      shape: BoxShape.circle,
+                    ),
+                    selectedDecoration: BoxDecoration(
+                      color: Color(0xFF071D99),
+                      shape: BoxShape.circle,
+                    ),
+                    todayDecoration: BoxDecoration(
+                      color: Color(0xFFD7A61F),
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                  headerStyle: HeaderStyle(
+                    formatButtonVisible: false,
+                    titleCentered: true,
+                    titleTextStyle: TextStyle(
+                      fontSize: fontSize * 1.2,
+                      fontWeight: FontWeight.bold,
+                      color: const Color(0xFF071D99),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
@@ -626,19 +835,30 @@ class _HomepageState extends State<Homepage> {
     final fontSize = width * 0.03;
 
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 255, 255, 255), // Blue background
-      drawer: _buildMainMenuDrawer(),
+      backgroundColor: const Color.fromARGB(
+        255,
+        255,
+        255,
+        255,
+      ), // Blue background
+      endDrawer: _buildMainMenuDrawer(), // Use endDrawer for right-side drawer
       body: SingleChildScrollView(
         padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 30),
         child: Column(
           children: [
             // Profile Section
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 32.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20.0,
+                vertical: 32.0,
+              ),
               margin: const EdgeInsets.symmetric(horizontal: 16.0),
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
-                  colors: [Color(0xFF071D99), Color(0xFFD7A61F)], // Blue to Yellow gradient
+                  colors: [
+                    Color(0xFF071D99),
+                    Color(0xFFD7A61F),
+                  ], // Blue to Yellow gradient
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
@@ -657,7 +877,9 @@ class _HomepageState extends State<Homepage> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const ProfilePage()),
+                        MaterialPageRoute(
+                          builder: (context) => const ProfilePage(),
+                        ),
                       );
                     },
                     child: MouseRegion(
@@ -665,7 +887,11 @@ class _HomepageState extends State<Homepage> {
                       child: CircleAvatar(
                         radius: 20,
                         backgroundColor: const Color(0xFFD7A61F), // Yellow
-                        child: const Icon(Icons.person, size: 30, color: Colors.white),
+                        child: const Icon(
+                          Icons.person,
+                          size: 30,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
@@ -675,7 +901,7 @@ class _HomepageState extends State<Homepage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Hello, $_name', 
+                          'Hello, $_name',
                           style: TextStyle(
                             fontSize: fontSize * 1.4,
                             fontWeight: FontWeight.bold,
@@ -697,48 +923,52 @@ class _HomepageState extends State<Homepage> {
                     ),
                   ),
                   Builder(
-                    builder: (context) => Row(
-                      children: [
-                        IconButton(
-                          icon: Stack(
-                            children: [
-                              const Icon(Icons.notifications, color: Colors.white),
-                              Positioned(
-                                right: 0,
-                                top: 0,
-                                child: Container(
-                                  padding: const EdgeInsets.all(2),
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFFD7A61F),
-                                    borderRadius: BorderRadius.circular(6),
+                    builder:
+                        (context) => Row(
+                          children: [
+                            IconButton(
+                              icon: Stack(
+                                children: [
+                                  const Icon(
+                                    Icons.notifications,
+                                    color: Colors.white,
                                   ),
-                                  constraints: const BoxConstraints(
-                                    minWidth: 14,
-                                    minHeight: 14,
-                                  ),
-                                  child: Text(
-                                    _notifNumber,
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.bold,
+                                  Positioned(
+                                    right: 0,
+                                    top: 0,
+                                    child: Container(
+                                      padding: const EdgeInsets.all(2),
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xFFD7A61F),
+                                        borderRadius: BorderRadius.circular(6),
+                                      ),
+                                      constraints: const BoxConstraints(
+                                        minWidth: 14,
+                                        minHeight: 14,
+                                      ),
+                                      child: Text(
+                                        _notifNumber,
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
                                     ),
-                                    textAlign: TextAlign.center,
                                   ),
-                                ),
+                                ],
                               ),
-                            ],
-                          ),
-                          onPressed: () {
-                            ////////////// Handle notifications page ///////////////////////
-                          },
+                              onPressed: () {
+                                ////////////// Handle notifications page ///////////////////////
+                              },
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.menu, color: Colors.white),
+                              onPressed: () => _showMainMenu(context),
+                            ),
+                          ],
                         ),
-                        IconButton(
-                          icon: const Icon(Icons.menu, color: Colors.white),
-                          onPressed: () => _showMainMenu(context),
-                        ),
-                      ],
-                    ),
                   ),
                 ],
               ),
@@ -779,7 +1009,12 @@ class _HomepageState extends State<Homepage> {
                           margin: const EdgeInsets.only(right: 16),
                           child: Card(
                             elevation: 4,
-                            color: const Color.fromARGB(255, 8, 33, 96), // Dark blue
+                            color: const Color.fromARGB(
+                              255,
+                              8,
+                              33,
+                              96,
+                            ), // Dark blue
                             shadowColor: Colors.black.withOpacity(0.2),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
@@ -795,7 +1030,11 @@ class _HomepageState extends State<Homepage> {
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Icon(item.icon, size: 48, color: const Color(0xFFD7A61F)), // Yellow icons
+                                  Icon(
+                                    item.icon,
+                                    size: 48,
+                                    color: const Color(0xFFD7A61F),
+                                  ), // Yellow icons
                                   const SizedBox(height: 12),
                                   Text(
                                     item.title,
@@ -822,38 +1061,7 @@ class _HomepageState extends State<Homepage> {
             const SizedBox(height: 20),
 
             // Calendar Section
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Your Calendar',
-                    style: TextStyle(
-                      fontSize: fontSize * 1.2,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Jost',
-                      color: Color(0xFF071D99),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Container(
-                    height: 300,
-                    decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 255, 255, 255), // Dark blue
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: const Color(0xFFD7A61F)), // Yellow border
-                    ),
-                    child: const Center(
-                      child: Text(
-                        'Calendar will be implemented here', ///////////////calendar functionalities////////////////
-                        style: TextStyle(color: Color(0xFF071D99)),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            _buildCalendarSection(),
 
             const SizedBox(height: 20),
 
@@ -868,19 +1076,19 @@ class _HomepageState extends State<Homepage> {
   Widget _getPageForItem(String title) {
     switch (title) {
       case 'Attendance Tracker':
-        // return const AttendanceTrackerPage(); // Uncomment and implement this when ready
+      // return const AttendanceTrackerPage(); // Uncomment and implement this when ready
       case 'Event Finder':
         return const EventFinderPage(); // Redirect to EventFinderPage
       case 'Calendar':
-        // return const CalendarPage(); // Uncomment and implement this when ready
+      // return const CalendarPage(); // Uncomment and implement this when ready
       case 'Marketplace':
-        // return const MarketplacePage(); // Uncomment and implement this when ready
+      // return const MarketplacePage(); // Uncomment and implement this when ready
       case 'Grades Tracker':
-        // return const GradesTrackerPage(); // Uncomment and implement this when ready
+      // return const GradesTrackerPage(); // Uncomment and implement this when ready
       case 'Social Collaboration':
-        // return const SocialCollaborationPage(); // Uncomment and implement this when ready
+      // return const SocialCollaborationPage(); // Uncomment and implement this when ready
       case 'Schedule Manager':
-        // return const ScheduleManagerPage(); // Uncomment and implement this when ready
+      // return const ScheduleManagerPage(); // Uncomment and implement this when ready
       default:
         return const SizedBox(); // Return an empty widget as fallback
     }
@@ -899,11 +1107,7 @@ class DashboardItem {
   final IconData icon;
   final String type;
 
-  DashboardItem({
-    required this.title,
-    required this.icon,
-    this.type = 'page',
-  });
+  DashboardItem({required this.title, required this.icon, this.type = 'page'});
 }
 
 class Activity {
