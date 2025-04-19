@@ -4,13 +4,13 @@ import 'eventfinderpage.dart';
 class EventDetailsPage extends StatefulWidget {
   final Event event;
   final Function(bool)? onBookmarkChanged;
-  final Function(bool)? onAttendingChanged;  // Add this line
+  final Function(bool)? onAttendingChanged;   
 
   const EventDetailsPage({
     super.key,
     required this.event,
     this.onBookmarkChanged,
-    this.onAttendingChanged,  // Add this line
+    this.onAttendingChanged,   
   });
 
   @override
@@ -19,14 +19,14 @@ class EventDetailsPage extends StatefulWidget {
 
 class _EventDetailsPageState extends State<EventDetailsPage> {
   bool isBookmarked = false;
-  bool isAttending = false;  // Add this line
+  bool isAttending = false;   
 
   @override
   void initState() {
     super.initState();
     // Initialize bookmark state from the event
     isBookmarked = widget.event.isBookmarked;
-    isAttending = widget.event.isAttending;  // Add this line
+    isAttending = widget.event.isAttending;   
   }
 
   void _toggleBookmark() {
