@@ -1,10 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:xavlogsigninpage/login_page.dart';
 import 'terms_and_conditions.dart';
-import 'faqs.dart'; 
+import 'faqs.dart';
+
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+  final String? orgName;
+  final String? description;
+  final String? profileImageUrl;
+  final String? orgcontact;
+  final String? orgemail;
+  final bool isOrganization;
+
+  const ProfilePage({
+    super.key, 
+    this.orgName,
+    this.description,
+    this.profileImageUrl,
+    this.orgcontact,
+    this.orgemail,
+    this.isOrganization = false,
+  });
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -13,12 +29,26 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   final _formKey = GlobalKey<FormState>();
   bool _isEditing = false;
-  String name = 'John Doe';
-  String description = 'Student';
-  String contact = '+1 234 567 8900';
-  String email = 'john.doe@example.com';
+  late String name;
+  late String description;
+  late String profileImageUrl;
+  late String contact;
+  late String email;
+  
+  // Additional fields for individual profiles
   String department = 'Computer Science';
   String program = 'BS IT';
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize with provided values or defaults
+    name = widget.orgName ?? (widget.isOrganization ? 'Computer Science Society' : 'John Doe');
+    description = widget.description ?? (widget.isOrganization ? 'Student Organization' : 'Student');
+    profileImageUrl = widget.profileImageUrl ?? 'https://picsum.photos/500?random=1';
+    contact = widget.isOrganization ? (widget.orgcontact ?? 'Not provided') : '+1 234 567 8900';
+    email = widget.isOrganization ? (widget.orgemail ?? 'org@example.com') : 'john.doe@example.com';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +57,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
     // Responsive dimensions
     final fontSize = width * 0.03;
-    final iconSize = width * 0.04;
 
     return Scaffold(
       backgroundColor: Colors.white, // Set background to white
@@ -45,7 +74,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 _isEditing = false;
               });
             } else {
-              Navigator.pop(context);
+              _navigateBackWithData();
             }
           },
         ),
@@ -84,7 +113,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   CircleAvatar(
                     radius: width * 0.10, // Responsive avatar size
                     backgroundColor: const Color.fromARGB(255, 146, 146, 146),
-                    child: Icon(Icons.person, size: iconSize * 2, color: Colors.white),
+                    backgroundImage: NetworkImage(profileImageUrl),
                   ),
                   const SizedBox(height: 16),
                   Text(
@@ -108,19 +137,34 @@ class _ProfilePageState extends State<ProfilePage> {
                   const SizedBox(height: 20),
 
                   // Personal Information Section
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: _buildInfoCard(
-                      'Personal Information',
-                      [
-                        _buildInfoTile(Icons.email, 'Email', email),
-                        _buildInfoTile(Icons.phone, 'Phone', contact),
-                        _buildInfoTile(Icons.home_filled, 'Department', department),
-                        _buildInfoTile(Icons.category, 'Program of Study', program),
-                      ],
-                      showEditIcon: true,
+                  if (!widget.isOrganization)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: _buildInfoCard(
+                        'Personal Information',
+                        [
+                          _buildInfoTile(Icons.email, 'Email', email),
+                          _buildInfoTile(Icons.phone, 'Phone', contact),
+                          _buildInfoTile(Icons.home_filled, 'Department', department),
+                          _buildInfoTile(Icons.category, 'Program of Study', program),
+                        ],
+                        showEditIcon: true,
+                      ),
                     ),
-                  ),
+                    
+                  // Organization Information Section
+                  if (widget.isOrganization)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: _buildInfoCard(
+                        'Organization Information',
+                        [
+                          _buildInfoTile(Icons.email, 'Email', email),
+                          _buildInfoTile(Icons.phone, 'Contact', contact),
+                        ],
+                        showEditIcon: true,
+                      ),
+                    ),
 
                   const SizedBox(height: 16),
 
@@ -224,20 +268,26 @@ class _ProfilePageState extends State<ProfilePage> {
             // Name Field
             _buildTextField('Name', nameController, (value) => name = value),
 
-            // Contact Field
-            _buildTextField('Phone', contactController, (value) => contact = value),
+            // Contact Field - Show for both types of accounts with appropriate label
+            _buildTextField(
+              widget.isOrganization ? 'Contact' : 'Phone', 
+              contactController, 
+              (value) => contact = value
+            ),
 
-            // Email Field
+            // Email Field - Show for both types of accounts
             _buildTextField('Email', emailController, (value) => email = value),
 
             // Description Field
             _buildTextField('Description', descriptionController, (value) => description = value),
 
-            // Department Field
-            _buildTextField('Department', departmentController, (value) => department = value),
+            // Department Field - Only for personal accounts
+            if (!widget.isOrganization)
+              _buildTextField('Department', departmentController, (value) => department = value),
 
-            // Program Field
-            _buildTextField('Program of Study', programController, (value) => program = value),
+            // Program Field - Only for personal accounts
+            if (!widget.isOrganization)
+              _buildTextField('Program of Study', programController, (value) => program = value),
 
             const SizedBox(height: 20),
 
@@ -450,7 +500,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Widget _buildSettingsSidebar() {
     return Drawer(
-      backgroundColor: const Color(0xFF071D99), // Blue background
+      backgroundColor: Colors.white, // background
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
@@ -479,15 +529,15 @@ class _ProfilePageState extends State<ProfilePage> {
                   description,
                   style: const TextStyle(
                     fontSize: 14,
-                    color: Colors.white70,
+                    color: Colors.white,
                   ),
                 ),
               ],
             ),
           ),
           ListTile(
-            leading: const Icon(Icons.account_circle, color: Colors.white),
-            title: const Text('Account Settings', style: TextStyle(color: Colors.white)),
+            leading: const Icon(Icons.account_circle, color: Color.fromARGB(255, 16, 16, 16)),
+            title: const Text('Account Settings', style: TextStyle(color: Color.fromARGB(255, 16, 16, 16))),
             onTap: () {
               // Handle Account Settings action
               Navigator.pop(context);
@@ -497,8 +547,8 @@ class _ProfilePageState extends State<ProfilePage> {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.notifications, color: Colors.white),
-            title: const Text('Notifications', style: TextStyle(color: Colors.white)),
+            leading: const Icon(Icons.notifications, color: Color.fromARGB(255, 16, 16, 16)),
+            title: const Text('Notifications', style: TextStyle(color: Color.fromARGB(255, 16, 16, 16))),
             onTap: () {
               // Handle Notifications action
               Navigator.pop(context);
@@ -508,8 +558,8 @@ class _ProfilePageState extends State<ProfilePage> {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.privacy_tip, color: Colors.white),
-            title: const Text('Privacy Policy', style: TextStyle(color: Colors.white)),
+            leading: const Icon(Icons.privacy_tip, color: Color.fromARGB(255, 16, 16, 16)),
+            title: const Text('Privacy Policy', style: TextStyle(color: Color.fromARGB(255, 16, 16, 16))),
             onTap: () {
               // Handle Privacy Policy action
               Navigator.pop(context);
@@ -519,8 +569,8 @@ class _ProfilePageState extends State<ProfilePage> {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.logout, color: Colors.white),
-            title: const Text('Log Out', style: TextStyle(color: Colors.white)),
+            leading: const Icon(Icons.logout, color: Color.fromARGB(255, 16, 16, 16)),
+            title: const Text('Log Out', style: TextStyle(color: Color.fromARGB(255, 16, 16, 16))),
             onTap: () {
               Navigator.pop(context); // Close the drawer first
               showDialog(
@@ -579,5 +629,13 @@ class _ProfilePageState extends State<ProfilePage> {
         ],
       ),
     );
+  }
+
+  void _navigateBackWithData() {
+    Navigator.pop(context, {
+      'name': name,
+      'description': description,
+      'profileImage': profileImageUrl,
+    });
   }
 }

@@ -1,3 +1,19 @@
+/// XavLog - Main Application Entry Point
+/// 
+/// Purpose: Main entry point for the XavLog application that initializes the app
+/// and sets up the theme and initial route.
+/// 
+/// Flow:
+/// 1. App is launched
+/// 2. MaterialApp is initialized with the app theme
+/// 3. Initial route is set to SigninPage
+/// 
+/// Backend Implementation Needed:
+/// - User authentication state management
+/// - Session persistence across app launches
+/// - Environment configuration for dev/staging/production
+library;
+
 import 'package:flutter/material.dart';
 import 'package:xavlogsigninpage/signin_page.dart';
 
@@ -17,29 +33,27 @@ Description:
     - Footer
       - Terms & Conditions
       - FAQs
-  The page will be styled with the following:
-    - Background color: #D7A61F
-    - Logo: xavLog logo
-    - Application name: xavLog
-    - Sign-in form: White background with 10px border radius
-    - Sign-in button: Gradient background with white text color
-    - Footer: Terms & Conditions and FAQs will be clickable and styled with underline
  */
 
 void main() {
-  runApp(MyApp());
+  // Entry point for the application
+  runApp(const XavLog());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class XavLog extends StatelessWidget {
+  const XavLog({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'xavLog',
+      title: 'xavLog', // Application title shown in OS task switchers
+      
+      // Application-wide theme configuration
       theme: ThemeData(
         primaryColor: Colors.blueAccent,
-        fontFamily: 'Jost',
+        fontFamily: 'Jost', // Primary font throughout the app
+        
+        // Text theme definitions for consistent typography
         textTheme: const TextTheme(
           bodyLarge: TextStyle(fontFamily: 'Jost'),
           bodyMedium: TextStyle(fontFamily: 'Jost'),
@@ -48,8 +62,12 @@ class MyApp extends StatelessWidget {
           labelLarge: TextStyle(fontFamily: 'Jost'),
         ),
       ),
+      // Remove the debug banner in all environments
       debugShowCheckedModeBanner: false,
-      home: SigninPage(),
+      
+      // Initial route of the application
+      // BACKEND TODO: Check for existing auth token and redirect to appropriate dashboard if logged in
+      home: const SigninPage(),
     );
   }
 }

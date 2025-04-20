@@ -1,9 +1,30 @@
+/// Home Page Dashboard
+/// 
+/// Purpose: Main dashboard displaying student information, analytics, calendar,
+/// navigation options, and upcoming activities.
+/// 
+/// Flow:
+/// 1. User logs in and is directed to this dashboard
+/// 2. User can view their profile information and analytics
+/// 3. User can navigate to different features of the app
+/// 4. User can manage their calendar and upcoming activities
+/// 5. User can access notifications and settings
+/// 
+/// Backend Implementation Needed:
+/// - User profile data retrieval from database
+/// - Analytics data calculation and retrieval
+/// - Calendar events synchronization with backend
+/// - Activities storage and retrieval
+/// - Real-time notifications system
+library;
+
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'profile.dart';
-import 'eventfinderpage.dart';
+import 'eventfinderpage_reg.dart';
 import 'login_page.dart';
 import 'faqs.dart';
+import 'notifications_page.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -16,6 +37,7 @@ class _HomepageState extends State<Homepage> {
   String _name = 'Francis';
   String _description = '2 - BSIT';
   String _notifNumber = '3';
+  String _profileImageUrl = 'https://picsum.photos/200?random=1';
 
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
@@ -32,11 +54,13 @@ class _HomepageState extends State<Homepage> {
     'Organization',
   ];
 
+  // Navigation items for the main dashboard
+  // BACKEND: These items should be dynamically loaded based on user permissions and profile type
   final List<DashboardItem> navigationItems = [
     DashboardItem(
       title: 'Attendance Tracker',
       icon: Icons.track_changes,
-      type: 'page',
+      type: 'page', // DYNAMIC: Could be 'page', 'link', or 'external' based on navigation behavior
     ),
     DashboardItem(title: 'Calendar', icon: Icons.calendar_today, type: 'page'),
     DashboardItem(title: 'Event Finder', icon: Icons.event, type: 'page'),
@@ -54,24 +78,27 @@ class _HomepageState extends State<Homepage> {
     ),
   ];
 
+  // Activities shown on the dashboard
+  // BACKEND: Should be fetched from API based on user ID and relevance
+  // DYNAMIC: Should update in real-time as new activities are added
   final List<Activity> activities = [
     Activity(
       title: 'Midterm Examination',
       description: 'Comprehensive exam covering chapters 1-5',
-      date: DateTime.now().add(const Duration(days: 2)),
-      category: 'Academic',
+      date: DateTime.now().add(const Duration(days: 2)), // DYNAMIC: Calculate from current date
+      category: 'Academic', // Used for filtering and categorization
     ),
     Activity(
       title: 'Project Deadline',
       description: 'Final submission of mobile development project',
-      date: DateTime.now().add(const Duration(days: 5)),
+      date: DateTime.now().add(const Duration(days: 5)), // DYNAMIC: Calculate from current date
       category: 'Project',
     ),
     Activity(
       title: 'Organization Meeting',
       description: 'Monthly general assembly',
-      date: DateTime.now().add(const Duration(days: 7)),
-      category: 'Organization',
+      date: DateTime.now().add(const Duration(days: 7)), // DYNAMIC: Calculate from current date
+      category: 'Organization', // BACKEND: Missing date field should be handled gracefully
     ),
     /////////////////////// Add more activities as needed through add button on upcoming activities //////////////////////////
   ];
@@ -269,7 +296,7 @@ class _HomepageState extends State<Homepage> {
                     crossAxisCount: 2,
                     childAspectRatio: 1.5,
                     children: [
-                      /////////////// chnage numbers according to computations of analytics //////////////
+                      /////////////// change numbers according to computations of analytics //////////////
                       _buildStatCard(
                         'Total Classes',
                         '28',
@@ -283,7 +310,7 @@ class _HomepageState extends State<Homepage> {
                         fontSize * 1.2,
                       ),
                       _buildStatCard(
-                        'Classes',
+                        'Classes Attended',
                         '24/28',
                         Icons.class_,
                         fontSize * 1.2,
@@ -292,12 +319,6 @@ class _HomepageState extends State<Homepage> {
                         'Performance',
                         'Good',
                         Icons.trending_up,
-                        fontSize * 1.2,
-                      ),
-                      _buildStatCard(
-                        'Status',
-                        'On Track',
-                        Icons.check_circle,
                         fontSize * 1.2,
                       ),
                     ],
@@ -311,8 +332,7 @@ class _HomepageState extends State<Homepage> {
                     title: const Text('View Full Analytics'),
                     trailing: const Icon(Icons.arrow_forward_ios),
                     onTap: () {
-                      ///////////////////// Handle analytics navigation /////////////////////
-                      // Navigator.push(context, MaterialPageRoute(builder: (context) => const AnalyticsPage()));
+                      _showAnalyticsSheet();
                     },
                   ),
                 ],
@@ -321,6 +341,305 @@ class _HomepageState extends State<Homepage> {
           ),
         ],
       ),
+    );
+  }
+
+  void _showAnalyticsSheet() {
+    final screenSize = MediaQuery.of(context).size;
+    final width = screenSize.width;
+    final fontSize = width * 0.035;
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder:
+          (context) => Container(
+            height: screenSize.height * 0.8,
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+            ),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Student Analytics',
+                        style: TextStyle(
+                          fontFamily: 'Jost',
+                          fontSize: fontSize * 1.4,
+                          fontWeight: FontWeight.bold,
+                          color: const Color(0xFF071D99),
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.close),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                    ],
+                  ),
+                ),
+                const Divider(height: 1),
+                Expanded(
+                  child: ListView(
+                    padding: const EdgeInsets.all(16.0),
+                    children: [
+                      // Attendance analytics card
+                      Card(
+                        elevation: 2,
+                        margin: const EdgeInsets.only(bottom: 16),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Attendance Overview',
+                                style: TextStyle(
+                                  fontFamily: 'Jost',
+                                  fontSize: fontSize * 1.2,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color(0xFF071D99),
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  _buildPieChartItem(
+                                    'Present',
+                                    0.85,
+                                    const Color(0xFF071D99),
+                                  ),
+                                  _buildPieChartItem(
+                                    'Absent',
+                                    0.08,
+                                    Colors.red,
+                                  ),
+                                  _buildPieChartItem(
+                                    'Late',
+                                    0.07,
+                                    const Color(0xFFD7A61F),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 16),
+                              const Text('Attendance Distribution'),
+                            ],
+                          ),
+                        ),
+                      ),
+
+                      // Performance Analytics
+                      Card(
+                        elevation: 2,
+                        margin: const EdgeInsets.only(bottom: 16),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Subject Performance',
+                                style: TextStyle(
+                                  fontFamily: 'Jost',
+                                  fontSize: fontSize * 1.2,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color(0xFF071D99),
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+                              SizedBox(height: 200, child: _buildBarChart()),
+                            ],
+                          ),
+                        ),
+                      ),
+
+                      // Progress Analytics
+                      Card(
+                        elevation: 2,
+                        margin: const EdgeInsets.only(bottom: 16),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Semester Progress',
+                                style: TextStyle(
+                                  fontFamily: 'Jost',
+                                  fontSize: fontSize * 1.2,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color(0xFF071D99),
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          'Completed',
+                                          style: TextStyle(
+                                            fontFamily: 'Jost',
+                                            color: Colors.green,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Text(
+                                          '60%',
+                                          style: TextStyle(
+                                            fontFamily: 'Jost',
+                                            fontSize: fontSize * 1.3,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    height: 50,
+                                    width: 1,
+                                    color: Colors.grey[300],
+                                  ),
+                                  Expanded(
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          'Remaining',
+                                          style: TextStyle(
+                                            fontFamily: 'Jost',
+                                            color: Colors.orange,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Text(
+                                          '40%',
+                                          style: TextStyle(
+                                            fontFamily: 'Jost',
+                                            fontSize: fontSize * 1.3,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+
+                      // Export Button
+                      ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF071D99),
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                        ),
+                        onPressed: () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Analytics report exported'),
+                            ),
+                          );
+                        },
+                        icon: const Icon(Icons.download, color: Colors.white),
+                        label: Text(
+                          'Export Report',
+                          style: TextStyle(
+                            fontFamily: 'Jost',
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+    );
+  }
+
+  Widget _buildPieChartItem(String label, double value, Color color) {
+    return Column(
+      children: [
+        Stack(
+          alignment: Alignment.center,
+          children: [
+            SizedBox(
+              width: 60,
+              height: 60,
+              child: CircularProgressIndicator(
+                value: value,
+                strokeWidth: 8,
+                backgroundColor: Colors.grey[200],
+                valueColor: AlwaysStoppedAnimation<Color>(color),
+              ),
+            ),
+            Text(
+              '${(value * 100).toInt()}%',
+              style: const TextStyle(
+                fontFamily: 'Jost',
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        Text(label, style: const TextStyle(fontFamily: 'Jost')),
+      ],
+    );
+  }
+
+  Widget _buildBarChart() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        _buildBar('Programming', 0.88, const Color(0xFF071D99)),
+        _buildBar('Mathematics', 0.75, const Color(0xFFD7A61F)),
+        _buildBar('Database', 0.92, const Color(0xFF071D99)),
+        _buildBar('Networks', 0.80, const Color(0xFFD7A61F)),
+      ],
+    );
+  }
+
+  Widget _buildBar(String label, double value, Color color) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Container(
+          width: 40,
+          height: 150 * value,
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.circular(4),
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          label,
+          style: const TextStyle(fontFamily: 'Jost', fontSize: 12),
+          textAlign: TextAlign.center,
+          overflow: TextOverflow.ellipsis,
+        ),
+        Text(
+          '${(value * 100).toInt()}%',
+          style: const TextStyle(
+            fontFamily: 'Jost',
+            fontWeight: FontWeight.bold,
+            fontSize: 12,
+          ),
+        ),
+      ],
     );
   }
 
@@ -503,7 +822,9 @@ class _HomepageState extends State<Homepage> {
   }
 
   void _showMainMenu(BuildContext context) {
-    Scaffold.of(context).openEndDrawer(); // Use openEndDrawer to open the drawer from the right
+    Scaffold.of(
+      context,
+    ).openEndDrawer(); // Use openEndDrawer to open the drawer from the right
   }
 
   Drawer _buildMainMenuDrawer() {
@@ -517,13 +838,13 @@ class _HomepageState extends State<Homepage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                    Center(
+                  Center(
                     child: const CircleAvatar(
                       radius: 30,
                       backgroundColor: Color(0xFFD7A61F),
                       child: Icon(Icons.person, size: 40, color: Colors.white),
                     ),
-                    ),
+                  ),
 
                   const SizedBox(height: 8),
                   Center(
@@ -563,8 +884,12 @@ class _HomepageState extends State<Homepage> {
                 ),
               ),
               onTap: () {
-                ///////////////// Handle notifications, open notif page ////////////////////////
-                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const NotificationsPage(),
+                  ),
+                );
               },
             ),
             ListTile(
@@ -878,19 +1203,42 @@ class _HomepageState extends State<Homepage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const ProfilePage(),
+                          builder:
+                              (context) => ProfilePage(
+                                isOrganization: false,
+                                orgName: _name,
+                                description: _description,
+                              ),
                         ),
-                      );
+                      ).then((result) {
+                        // Update dashboard with the returned profile data
+                        if (result != null && result is Map<String, dynamic>) {
+                          setState(() {
+                            _name = result['name'] ?? _name;
+                            _description =
+                                result['description'] ?? _description;
+                          });
+                        }
+                      });
                     },
                     child: MouseRegion(
                       cursor: SystemMouseCursors.click,
-                      child: CircleAvatar(
-                        radius: 20,
-                        backgroundColor: const Color(0xFFD7A61F), // Yellow
-                        child: const Icon(
-                          Icons.person,
-                          size: 30,
-                          color: Colors.white,
+                      child: Hero(
+                        tag: 'orgProfileImage',
+                        child: CircleAvatar(
+                          radius: 30,
+                          backgroundColor: Colors.white,
+                          backgroundImage: NetworkImage(_profileImageUrl),
+                          onBackgroundImageError: (_, __) {
+                            setState(() {
+                              _profileImageUrl = 'https://picsum.photos/200?random=1';
+                            });
+                          },
+                          child: _profileImageUrl.isEmpty ? const Icon(
+                            Icons.person,
+                            size: 30,
+                            color: Color(0xFF071D99),
+                          ) : null,
                         ),
                       ),
                     ),
@@ -960,7 +1308,13 @@ class _HomepageState extends State<Homepage> {
                                 ],
                               ),
                               onPressed: () {
-                                ////////////// Handle notifications page ///////////////////////
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder:
+                                        (context) => const NotificationsPage(),
+                                  ),
+                                );
                               },
                             ),
                             IconButton(

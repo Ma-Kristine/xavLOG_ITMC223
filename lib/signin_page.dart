@@ -1,3 +1,21 @@
+/// Sign-in Page
+/// 
+/// Purpose: Provides the initial sign-in interface for all users
+/// 
+/// Flow:
+/// 1. User enters email and password
+/// 2. User clicks "Sign In" button to create a new account
+/// 3. User can navigate to existing login page if already has an account
+/// 4. User can access Terms & Conditions and FAQs from the footer
+/// 
+/// Backend Implementation Needed:
+/// - Email validation
+/// - Password strength validation
+/// - User authentication against backend server
+/// - Error handling for authentication failures
+/// - Secure credential storage
+library;
+
 import 'package:flutter/material.dart';
 import 'package:xavlogsigninpage/login_page.dart';
 import 'account_choose.dart';
@@ -11,7 +29,7 @@ class SigninPage extends StatefulWidget {
 }
 
 class _SigninPageState extends State<SigninPage> {
-  // Boolean variables for hover effects
+  // State variables for UI interaction effects
   bool isSignInHovered = false;
   bool isLoginHovered = false;
   bool isTermsHovered = false;
@@ -20,26 +38,29 @@ class _SigninPageState extends State<SigninPage> {
 
   @override
   Widget build(BuildContext context) {
+    // Get device dimensions for responsive layout
     final screenSize = MediaQuery.of(context).size;
     final width = screenSize.width;
     final height = screenSize.height;
 
-    // Adjusted dimensions for better fit
-    final logoSize = width * 0.45; 
-    final buttonWidth = width * 0.30; 
-    final contentPadding = width * 0.02;
-    final fontSize = width * 0.03; 
+    // Calculate responsive dimensions based on screen size
+    final logoSize = width * 0.45; // Logo size is 45% of screen width
+    final buttonWidth = width * 0.30; // Button width is 30% of screen width
+    final contentPadding = width * 0.02; // Padding is 2% of screen width
+    final fontSize = width * 0.03; // Font size scales with screen width
 
     return Scaffold(
       body: Container(
         width: width,
         height: height,
+        // Xavier blue background color
         decoration: const BoxDecoration(
           color: Color(0xFF132BB2),
         ),
         child: Column(
           children: [
             SizedBox(height: height * 0.03),
+            // Logo at the top of the page
             Image.asset(
               'images/fulllogo.png',
               width: logoSize,
@@ -47,6 +68,7 @@ class _SigninPageState extends State<SigninPage> {
             ),
             SizedBox(height: height * 0.02),
             Expanded(
+              // Triangle-peeked white container for sign-in form
               child: ClipPath(
                 clipper: TrianglePeekClipper(),
                 child: Container(
@@ -59,6 +81,7 @@ class _SigninPageState extends State<SigninPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       SizedBox(height: height * 0.05),
+                      // Sign-in page title
                       Text(
                         'Sign-in',
                         style: TextStyle(
@@ -68,7 +91,7 @@ class _SigninPageState extends State<SigninPage> {
                           fontWeight: FontWeight.w900,
                         ),
                       ),
-                      // Email field
+                      // Email input field
                       SizedBox(
                         width: buttonWidth * 2,
                         child: TextField(
@@ -87,9 +110,10 @@ class _SigninPageState extends State<SigninPage> {
                               size: fontSize * 1.4,
                             ),
                           ),
+                          // BACKEND TODO: Implement email validation
                         ),
                       ),
-                      // Password field
+                      // Password input field with visibility toggle
                       SizedBox(
                         width: buttonWidth * 2,
                         child: TextField(
@@ -119,15 +143,22 @@ class _SigninPageState extends State<SigninPage> {
                               ),
                             ),
                           ),
+                          // BACKEND TODO: Implement password strength validation
                         ),
                       ),
                       SizedBox(height: height * 0.03),
+                      // Sign In button with hover effect
                       MouseRegion(
                         cursor: SystemMouseCursors.click,
                         onEnter: (_) => setState(() => isSignInHovered = true),
                         onExit: (_) => setState(() => isSignInHovered = false),
                         child: GestureDetector(
                           onTap: () {
+                            // BACKEND TODO: Implement user registration and validation
+                            // - Validate email format
+                            // - Validate password strength
+                            // - Create user account in database
+                            // - Handle registration errors
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -141,6 +172,7 @@ class _SigninPageState extends State<SigninPage> {
                             padding: EdgeInsets.all(contentPadding),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(width * 0.01),
+                              // Gold gradient for buttons
                               gradient: LinearGradient(
                                 colors: [
                                   isSignInHovered
@@ -165,6 +197,7 @@ class _SigninPageState extends State<SigninPage> {
                         ),
                       ),
                       SizedBox(height: height * 0.03),
+                      // Helper text for users
                       Text(
                         'Please use your assigned GBOX account to sign in',
                         textAlign: TextAlign.center,
@@ -176,6 +209,7 @@ class _SigninPageState extends State<SigninPage> {
                         ),
                       ),
                       SizedBox(height: height * 0.03),
+                      // Login to existing account link
                       Container(
                         alignment: Alignment.center,
                         width: double.infinity,
@@ -185,6 +219,7 @@ class _SigninPageState extends State<SigninPage> {
                           onExit: (_) => setState(() => isLoginHovered = false),
                           child: GestureDetector(
                             onTap: () {
+                              // Navigate to login page for existing users
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -207,9 +242,11 @@ class _SigninPageState extends State<SigninPage> {
                         ),
                       ),
                       SizedBox(height: height * 0.1),
+                      // Footer with Terms & Conditions and FAQs links
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
+                          // Terms & Conditions link with hover effect
                           MouseRegion(
                             cursor: SystemMouseCursors.click,
                             onEnter: (_) => setState(() => isTermsHovered = true),
@@ -237,6 +274,7 @@ class _SigninPageState extends State<SigninPage> {
                               ),
                             ),
                           ),
+                          // Separator between links
                           Text(
                             ' | ',
                             style: TextStyle(
@@ -245,6 +283,7 @@ class _SigninPageState extends State<SigninPage> {
                               fontWeight: FontWeight.w500,
                             ),
                           ),
+                          // FAQs link with hover effect
                           MouseRegion(
                             cursor: SystemMouseCursors.click,
                             onEnter: (_) => setState(() => isFAQsHovered = true),
@@ -286,16 +325,23 @@ class _SigninPageState extends State<SigninPage> {
   }
 }
 
+/**
+ * Custom Clipper for Triangle Peek Design
+ * 
+ * Creates a custom shape for the sign-in container with a triangular
+ * peek at the top, giving the UI a distinctive appearance.
+ */
 class TrianglePeekClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
     Path path = Path();
 
-    // Make triangle height responsive
+    // Calculate responsive triangle dimensions
     double triangleHeight = size.height * 0.15; // 15% of container height
     double triangleWidth = size.width;
     double startY = triangleHeight;
 
+    // Create the path with a triangle at the top
     path.moveTo(0, startY);
     path.lineTo(triangleWidth / 2, 0);
     path.lineTo(triangleWidth, startY);

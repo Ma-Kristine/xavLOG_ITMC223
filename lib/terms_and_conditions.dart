@@ -1,3 +1,24 @@
+/// Terms and Conditions Page
+/// 
+/// Purpose: Displays the application's terms and conditions in a formatted,
+/// user-friendly layout with collapsible sections.
+/// 
+/// Flow:
+/// 1. User navigates to this page from sign-in or login screens
+/// 2. Terms are presented in organized, visually distinct sections
+/// 3. User can scroll through terms and return to previous screen
+/// 
+/// UI Components:
+/// - AppBar with back navigation
+/// - Company logo
+/// - Introduction text
+/// - Categorized terms in card sections
+/// 
+/// Backend Implementation Needed:
+/// - Version tracking for terms updates
+/// - User acceptance status tracking
+library;
+
 import 'package:flutter/material.dart';
 
 class TermsAndConditions extends StatelessWidget {
@@ -15,14 +36,14 @@ class TermsAndConditions extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white, // Set background to white
       appBar: AppBar(
-        toolbarHeight: 70, // Increase toolbar height to lower the content
+        toolbarHeight: 80,
         flexibleSpace: Container(
           decoration: const BoxDecoration(
             color: Colors.white, // White AppBar background
           ),
         ),
         title: Padding(
-          padding: const EdgeInsets.only(top: 10.0), // Add padding to lower the title
+          padding: const EdgeInsets.only(top: 10.0),
           child: Text(
             'Terms And Conditions',
             style: TextStyle(
@@ -116,6 +137,16 @@ class TermsAndConditions extends StatelessWidget {
     );
   }
 
+  /// Builds a section card for terms and conditions
+  /// 
+  /// Creates a visually distinct card with:
+  /// - A blue gradient header containing the section title
+  /// - A white content area with the section details
+  /// - Properly styled text for readability
+  /// 
+  /// @param title The title of the section displayed in the header
+  /// @param content Either a string or List<String> of content items
+  /// @return A styled Card widget containing the section
   Widget _buildSectionCard(String title, dynamic content) {
     return Card(
       elevation: 4,

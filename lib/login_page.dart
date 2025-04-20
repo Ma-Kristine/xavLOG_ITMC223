@@ -1,3 +1,21 @@
+/// Login Page
+/// 
+/// Purpose: Allows existing users to log in to their xavLog accounts
+/// 
+/// Flow:
+/// 1. User enters their email and password
+/// 2. User clicks "Log-in" button to authenticate
+/// 3. Upon successful authentication, user is directed to their dashboard
+/// 4. Users without accounts can navigate to sign-up page
+/// 
+/// Backend Implementation Needed:
+/// - User authentication against database
+/// - Password hashing and verification
+/// - Session token generation and management
+/// - Failed login attempt handling and account lockout
+/// - Password recovery option (future enhancement)
+library;
+
 import 'package:flutter/material.dart';
 import 'signin_page.dart';
 import 'home_page_dashboard.dart';
@@ -9,6 +27,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  // UI state variables for interactive elements
   bool isLoginHovered = false;
   bool isTermsHovered = false;
   bool isFAQsHovered = false;
@@ -16,26 +35,29 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    // Get screen dimensions for responsive layout
     final screenSize = MediaQuery.of(context).size;
     final width = screenSize.width;
     final height = screenSize.height;
 
-    // Adjusted responsive dimensions
-    final logoSize = width * 0.45;
-    final buttonWidth = width * 0.30;
-    final contentPadding = width * 0.02;
-    final fontSize = width * 0.03; // Reduced for better scaling
+    // Calculate responsive dimensions based on screen size
+    final logoSize = width * 0.45; // Logo size is 45% of screen width
+    final buttonWidth = width * 0.30; // Button width is 30% of screen width
+    final contentPadding = width * 0.02; // Padding is 2% of screen width
+    final fontSize = width * 0.03; // Font size scales with screen width
 
     return Scaffold(
       body: Container(
         width: width,
         height: height,
+        // Xavier blue background color
         decoration: const BoxDecoration(
           color: Color(0xFF132BB2),
         ),
         child: Column(
           children: [
             SizedBox(height: height * 0.03),
+            // Logo at the top of the page
             Image.asset(
               'images/fulllogo.png',
               width: logoSize,
@@ -43,6 +65,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             SizedBox(height: height * 0.02),
             Expanded(
+              // Triangle-peeked white container for login form
               child: ClipPath(
                 clipper: TrianglePeekClipper(),
                 child: Container(
@@ -55,6 +78,7 @@ class _LoginPageState extends State<LoginPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       SizedBox(height: height * 0.02),
+                      // Login page title
                       Text(
                         'Log-in',
                         style: TextStyle(
@@ -66,7 +90,7 @@ class _LoginPageState extends State<LoginPage> {
                       Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          // Email field
+                          // Email input field
                           SizedBox(
                             width: buttonWidth * 2,
                             child: TextField(
@@ -79,10 +103,11 @@ class _LoginPageState extends State<LoginPage> {
                                   size: fontSize * 1.4,
                                 ),
                               ),
+                              // BACKEND TODO: Implement email validation and checking against database
                             ),
                           ),
-                          SizedBox(height: height * 0.02), // Reduced spacing between fields
-                          // Password field
+                          SizedBox(height: height * 0.02),
+                          // Password input field with visibility toggle
                           SizedBox(
                             width: buttonWidth * 2,
                             child: TextField(
@@ -106,17 +131,26 @@ class _LoginPageState extends State<LoginPage> {
                                   ),
                                 ),
                               ),
+                              // BACKEND TODO: Implement password verification
                             ),
                           ),
                         ],
                       ),
                       SizedBox(height: height * 0.03),
+                      // Login button with hover effect
                       MouseRegion(
                         cursor: SystemMouseCursors.click,
                         onEnter: (_) => setState(() => isLoginHovered = true),
                         onExit: (_) => setState(() => isLoginHovered = false),
                         child: GestureDetector(
                           onTap: () {
+                            // BACKEND TODO: Implement login authentication logic
+                            // - Validate credentials against database
+                            // - Generate and store auth token
+                            // - Handle failed login attempts
+                            // - Track login activity for security
+                            
+                            // Navigate to user dashboard after successful login
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -130,6 +164,7 @@ class _LoginPageState extends State<LoginPage> {
                             padding: EdgeInsets.all(contentPadding),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(width * 0.01),
+                              // Gold gradient for button
                               gradient: LinearGradient(
                                 colors: [
                                   isLoginHovered
@@ -152,7 +187,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                       ),
-
+                      // Helper text for users
                       Text(
                         'Please use your assigned GBOX account to Log-in',
                         textAlign: TextAlign.center,
@@ -163,7 +198,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       SizedBox(height: height * 0.02),
-                      // Create account row
+                      // Sign-up option for new users
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -175,6 +210,7 @@ class _LoginPageState extends State<LoginPage> {
                               fontWeight: FontWeight.w500,
                             ),
                           ),
+                          // "Create now" link with hover effect
                           MouseRegion(
                             cursor: SystemMouseCursors.click,
                             onEnter: (_) => setState(() => isTermsHovered = true),
@@ -207,6 +243,12 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  /**
+   * Shows a confirmation dialog for creating a new account
+   * 
+   * @param context The BuildContext for showing the dialog
+   * @param fontSize The font size to use for consistent UI
+   */
   void _showCreateAccountDialog(BuildContext context, double fontSize) {
     showDialog(
       context: context,
@@ -225,6 +267,7 @@ class _LoginPageState extends State<LoginPage> {
             style: TextStyle(fontSize: fontSize),
           ),
           actions: [
+            // "Yes" button - navigates to sign-in/registration page
             TextButton(
               onPressed: () {
                 Navigator.push(
@@ -243,6 +286,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
+            // "No" button - closes the dialog
             TextButton(
               onPressed: () {
                 Navigator.pop(context);
@@ -262,16 +306,23 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
+/**
+ * Custom Clipper for Triangle Peek Design
+ * 
+ * Creates a custom shape for the login container with a triangular
+ * peek at the top, matching the design of the sign-in page for consistency.
+ */
 class TrianglePeekClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
     Path path = Path();
 
-    // Make triangle height responsive
+    // Calculate responsive triangle dimensions
     double triangleHeight = size.height * 0.15; // 15% of container height
     double triangleWidth = size.width;
     double startY = triangleHeight;
 
+    // Create the path with a triangle at the top
     path.moveTo(0, startY);
     path.lineTo(triangleWidth / 2, 0);
     path.lineTo(triangleWidth, startY);

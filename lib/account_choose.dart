@@ -1,19 +1,36 @@
+/// Account Choose Page
+/// 
+/// Purpose: Allows users to select between student or organization account types
+/// 
+/// Flow: 
+/// 1. User navigates here from the sign-in page
+/// 2. User selects their account type
+/// 3. Based on selection, user is directed to the appropriate profile setup page
+/// 
+/// Backend Implementation Needed:
+/// - Account type selection should be saved to user profile in database
+/// - Authentication state should persist between screens
+/// - User role-based permissions system should be implemented
+library;
+
 import 'package:flutter/material.dart';
-import 'package:xavlogsigninpage/profile_organization.dart';
+import 'package:xavlogsigninpage/orgaccount_setup.dart';
 import 'package:xavlogsigninpage/signin_page.dart';
 import 'student_profile_elements.dart';
 
 class AccountChoosePage extends StatefulWidget {
+  // Constructor with optional key parameter
   const AccountChoosePage({super.key});
+  
   @override
   State<AccountChoosePage> createState() => _AccountChoosePageState();
 }
 
 class _AccountChoosePageState extends State<AccountChoosePage> {
-  // Add a variable to track selected account type
+  // Track which account type the user has selected
   String? selectedAccount;
 
-  //boolean variables for hover effect
+  // Boolean variables for UI hover effects
   bool isSignInHovered = false;
   bool isTermsHovered = false;
   bool isFAQsHovered = false;
@@ -21,38 +38,41 @@ class _AccountChoosePageState extends State<AccountChoosePage> {
 
   @override
   Widget build(BuildContext context) {
-
+    // Get device screen dimensions for responsive design
     final screenSize = MediaQuery.of(context).size;
     final width = screenSize.width;
     final height = screenSize.height;
 
-     // Calculate responsive dimensions
+    // Calculate responsive dimensions based on screen size
     final logoSize = width * 0.45; // 45% of screen width
-    final buttonWidth = width * 0.30; // 20% of screen width
-    final contentPadding = width * 0.01; // 2% of screen width
-    final fontSize = width * 0.03; 
+    final buttonWidth = width * 0.30; // 30% of screen width
+    final contentPadding = width * 0.01; // 1% of screen width for padding
+    final fontSize = width * 0.03; // Dynamic font size based on screen width
 
     return Scaffold(
       body: LayoutBuilder(
         builder: (context, constraints) {
           return SingleChildScrollView(
             child: Container(
+              // Ensure container fills at least the screen height
               constraints: BoxConstraints(
                 minHeight: MediaQuery.of(context).size.height,
               ),
               width: MediaQuery.of(context).size.width,
+              // Gradient background from blue to gold (Xavier colors)
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    Color(0xFF132BB2),
-                    Color(0xFFD7A61F),
+                    Color(0xFF132BB2), // Blue
+                    Color(0xFFD7A61F), // Gold
                   ],
                 ),
               ),
               child: Column(
                 children: [
+                  // Logo container at the top
                   Container(
                     width: MediaQuery.of(context).size.width,
                     padding: EdgeInsets.only(top: constraints.maxHeight * 0.02),
@@ -60,7 +80,8 @@ class _AccountChoosePageState extends State<AccountChoosePage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(height: height * 0.03),
-                        Center( //XAVLOG LOGO
+                        // XavLog logo centered
+                        Center(
                           child: Image.asset(
                             'images/fulllogo.png',
                             width: logoSize,
@@ -69,8 +90,9 @@ class _AccountChoosePageState extends State<AccountChoosePage> {
                         ),
                       ],
                     ),
-                    ),
+                  ),
                   SizedBox(height: constraints.maxHeight * 0.02),
+                  // Main white container for account selection
                   Container(
                     width: constraints.maxWidth * 0.9,
                     constraints: BoxConstraints(
@@ -85,19 +107,21 @@ class _AccountChoosePageState extends State<AccountChoosePage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         SizedBox(height: height * 0.03),
+                        // Title text
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: contentPadding * 2),
                           child: Text(
                             'What kind of account are you signing in with?',
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              color: Color(0xFF071D99),
+                              color: Color(0xFF071D99), // Dark blue
                               fontSize: fontSize * 1.8,
                               fontWeight: FontWeight.w900,
                             ),
                           ),
                         ),
                         SizedBox(height: height * 0.05),
+                        // Student account radio option
                         _buildRadioOption(
                           'Student Account',
                           'student',
@@ -105,6 +129,7 @@ class _AccountChoosePageState extends State<AccountChoosePage> {
                           contentPadding,
                         ),
                         SizedBox(height: height * 0.02),
+                        // Organization account radio option
                         _buildRadioOption(
                           'Organization Account',
                           'organization',
@@ -112,12 +137,15 @@ class _AccountChoosePageState extends State<AccountChoosePage> {
                           contentPadding,
                         ),
                         SizedBox(height: height * 0.05),
+                        // Next button - disabled until an account type is selected
                         SizedBox(
                           width: buttonWidth,
                           child: ElevatedButton(
                             onPressed: selectedAccount == null
-                                ? null
+                                ? null // Disabled if no account type selected
                                 : () {
+                                    // Navigate to appropriate setup page based on selection
+                                    // BACKEND TODO: Save account type selection to user profile
                                     if (selectedAccount == 'student') {
                                       Navigator.push(
                                         context,
@@ -135,13 +163,13 @@ class _AccountChoosePageState extends State<AccountChoosePage> {
                                     }
                                   },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Color(0xFFD7A61F),
+                              backgroundColor: Color(0xFFD7A61F), // Gold
                               foregroundColor: Colors.white,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               shadowColor: Colors.black,
-                              elevation: 5,
+                              elevation: 5, // Add shadow
                             ),
                             child: Text(
                               'Next',
@@ -153,13 +181,15 @@ class _AccountChoosePageState extends State<AccountChoosePage> {
                             ),
                           ),
                         ),
-                        SizedBox(height: height * 0.08), // space after next button
+                        SizedBox(height: height * 0.08),
+                        // Back to Sign-in link with hover effect
                         MouseRegion(
                           cursor: SystemMouseCursors.click,
                           onEnter: (event) => setState(() => isTermsHovered = true),
                           onExit: (event) => setState(() => isTermsHovered = false),
                           child: GestureDetector(
                             onTap: () {
+                              // Confirmation dialog before going back
                               showDialog(
                                 context: context,
                                 builder: (BuildContext context) {
@@ -175,7 +205,8 @@ class _AccountChoosePageState extends State<AccountChoosePage> {
                                     actions: [
                                       TextButton(
                                         onPressed: () {
-                                          Navigator.pop(context);
+                                          Navigator.pop(context); // Close dialog
+                                          // Navigate back to sign-in page
                                           Navigator.pushReplacement(
                                             context,
                                             MaterialPageRoute(
@@ -193,7 +224,7 @@ class _AccountChoosePageState extends State<AccountChoosePage> {
                                         ),
                                       ),
                                       TextButton(
-                                        onPressed: () => Navigator.pop(context),
+                                        onPressed: () => Navigator.pop(context), // Close dialog
                                         child: Text(
                                           'No',
                                           style: TextStyle(
@@ -217,7 +248,7 @@ class _AccountChoosePageState extends State<AccountChoosePage> {
                             ),
                           ),
                         ),
-                        SizedBox(height: height * 0.03), // Add bottom spacing
+                        SizedBox(height: height * 0.03),
                       ],
                     ),
                   ),
@@ -230,6 +261,13 @@ class _AccountChoosePageState extends State<AccountChoosePage> {
     );
   }
 
+  /// Helper method to build a radio option with consistent styling
+  /// 
+  /// @param text The display text for the radio option
+  /// @param value The value this option represents
+  /// @param fontSize The font size to use
+  /// @param contentPadding Padding amount for content
+  /// @return A styled RadioListTile widget
   Widget _buildRadioOption(
     String text,
     String value,
@@ -244,13 +282,13 @@ class _AccountChoosePageState extends State<AccountChoosePage> {
           text,
           style: TextStyle(
             fontSize: fontSize,
-            color: Color(0xFF071D99),
+            color: Color(0xFF071D99), // Dark blue
             fontWeight: FontWeight.w500,
           ),
         ),
         value: value,
         groupValue: selectedAccount,
-        activeColor: Color(0xFFD7A61F),
+        activeColor: Color(0xFFD7A61F), // Gold when selected
         onChanged: (String? value) {
           setState(() {
             selectedAccount = value;
