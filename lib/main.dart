@@ -15,7 +15,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:xavlogsigninpage/signin_page.dart';
+import 'package:xavlogsigninpage/login/signin_page.dart';
 
 /* Authored by: Arsent Bico
 Company: ASCEND
@@ -66,7 +66,6 @@ class XavLog extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       
       // Initial route of the application
-      // BACKEND TODO: Check for existing auth token and redirect to appropriate dashboard if logged in
       home: const SigninPage(),
     );
   }
