@@ -14,8 +14,8 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:xavlogsigninpage/dashboard_login_event_finder/dash_board/orgaccount_setup.dart';
-import 'package:xavlogsigninpage/dashboard_login_event_finder/login/signin_page.dart';
+import 'package:xavlogsigninpage/features/dash_board/orgaccount_setup.dart';
+import 'package:xavlogsigninpage/features/login/signin_page.dart';
 import '../dash_board/student_profile_elements.dart';
 
 class AccountChoosePage extends StatefulWidget {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:xavlogsigninpage/dashboard_login_event_finder/dash_board/profile.dart';
+import 'package:xavlogsigninpage/features/dash_board/profile.dart';
 //import 'analytics_page.dart';
 
 class Homepage extends StatefulWidget {
