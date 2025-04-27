@@ -10,9 +10,10 @@
 */
 
 import 'package:flutter/material.dart';
-import 'subjectPartitioning.dart';
+import 'subject_partitioning.dart';
 
 void main() {
+  
   runApp(const MyApp()); // Calls the correct entry point
 }
 
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget { // Define the missing MyApp class
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(fontFamily: 'Rubik'),
       home: const InitialPage(), // Load InitialPage correctly
     );
@@ -34,6 +36,8 @@ class InitialPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
+
       theme: ThemeData(fontFamily: 'Rubik'),
       home: AddSubjectScreen(),
     );
