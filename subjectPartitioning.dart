@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'gradesPartition.dart';
 
 class SubjectPartitioningScreen extends StatefulWidget {
   final String subjectName;
@@ -170,9 +171,11 @@ class _SubjectPartitioningScreenState extends State<SubjectPartitioningScreen> {
                                     onTap: () {
                                       Navigator.push(
                                         context,
-                                        MaterialPageRoute(builder: (context) => SubjectPartitioningScreen(
-                                          subjectName: name, 
-                                          addedPartitions: [],
+                                        MaterialPageRoute(builder: (context) => GradesPartitionScreen (
+                                          partitionName: name,
+                                          partitionScore: percentage, 
+                                          addedGradePartitions: [],
+                                          subjectName: widget.subjectName,
                                           ),
                                         ),
                                       );
@@ -201,7 +204,7 @@ class _SubjectPartitioningScreenState extends State<SubjectPartitioningScreen> {
                                                   ),
                                                 ),
                                                 Text(
-                                                  '${percentage} %',
+                                                  '${percentage}%',
                                                   style: TextStyle(
                                                     fontFamily: 'Jost',
                                                     fontSize: 15.0,
@@ -392,7 +395,7 @@ Widget buildInputField(String hintText, {bool isLarge = false, required TextEdit
 }
 
 // next sprint features: 
-// delete,
+// CRUD,
 // save,
 // numerical grade switching,
 // and computation
