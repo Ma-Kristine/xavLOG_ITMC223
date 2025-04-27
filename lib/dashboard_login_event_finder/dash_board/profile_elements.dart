@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:xavlogsigninpage/dash_board/home_page_dashboard.dart';
-import 'package:xavlogsigninpage/login/login_page.dart';
+import 'package:xavlogsigninpage/dashboard_login_event_finder/dash_board/home_page_dashboard.dart';
+import 'package:xavlogsigninpage/dashboard_login_event_finder/login/login_page.dart';
 
 class ProfileElementsPage extends StatefulWidget {
   const ProfileElementsPage({super.key});

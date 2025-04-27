@@ -17,7 +17,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:xavlogsigninpage/login/login_page.dart';
+import 'package:xavlogsigninpage/dashboard_login_event_finder/login/login_page.dart';
 import 'account_choose.dart';
 import 'terms_and_conditions.dart';
 import 'faqs.dart';

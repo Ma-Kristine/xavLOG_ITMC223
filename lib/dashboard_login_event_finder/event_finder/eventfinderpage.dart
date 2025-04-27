@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'event_details_page.dart';
-import '../models/event.dart';
+import '../../models/event.dart';
 class Category {
   final String name;
   final String imageUrl;

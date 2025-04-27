@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 // import 'package:file_picker/file_picker.dart'; // Commented out for testing
-import 'package:xavlogsigninpage/dash_board/org_dashboard.dart';
+import 'package:xavlogsigninpage/dashboard_login_event_finder/dash_board/org_dashboard.dart';
 
 class ProfileOrganization extends StatefulWidget {
   const ProfileOrganization({super.key});

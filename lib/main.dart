@@ -15,7 +15,7 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:xavlogsigninpage/login/signin_page.dart';
+import 'package:xavlogsigninpage/dashboard_login_event_finder/login/signin_page.dart';
 
 /* Authored by: Arsent Bico
 Company: ASCEND
